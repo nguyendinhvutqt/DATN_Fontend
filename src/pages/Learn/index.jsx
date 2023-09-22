@@ -1,14 +1,15 @@
 import classNames from "classnames/bind";
 import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
-import { NavLink, useLocation, useParams } from "react-router-dom";
+import { NavLink, useLocation, useParams, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 import styles from "./style.module.scss";
 import * as lessonService from "../../services/lessonService";
 import * as courseService from "../../services/courseService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck } from "@fortawesome/free-solid-svg-icons";
-import { useSelector } from "react-redux";
+import { faCircleCheck, faLessThan } from "@fortawesome/free-solid-svg-icons";
+import * as func from "../../ultils/func";
 
 const cx = classNames.bind(styles);
 
@@ -57,8 +58,6 @@ const Learn = () => {
         if (result.status === "OK") {
           setApiCalled(false);
           setCourse(result.data);
-        } else {
-          // Xử lý khi không tìm thấy khoá học
         }
       } catch (error) {
         // Xử lý lỗi khi gọi API
@@ -72,7 +71,7 @@ const Learn = () => {
   const handleProgress = (state) => {
     console.log("handleProgress");
     // Kiểm tra xem thời gian hiện tại của video đã đạt đến 3/4 hay chưa
-    if (state.played >= 0.5 && !apiCalled && !newLesson) {
+    if (state.played >= 0.75 && !apiCalled && !newLesson) {
       setApiCalled(true);
       setNewLesson(true);
       // played là tỉ lệ thời gian đã phát
@@ -101,14 +100,41 @@ const Learn = () => {
 
   return (
     <div className={cx("wrapper")}>
+      <div className={cx("wrapper-nav")}>
+        <div className={cx("nav")}>
+          <div className={cx("title-course")}>
+            <Link to="/">
+              <FontAwesomeIcon className={cx("icon-back")} icon={faLessThan} />
+            </Link>
+            <h2 className={cx("name-course")}>{course?.title}</h2>
+          </div>
+          <div className={cx("logic-course")}>
+            <div className={cx("progress-bar")}>
+              <div className={cx("progress")}>
+                <div className={cx("percentage")}>
+                  {course &&
+                    `${func.getPrtcentLessonSuccess(course, user.userId)}%`}
+                </div>
+              </div>
+            </div>
+            <p className={cx("count-course")}>
+              {course &&
+                `${func.getTotalLessonsByUser(
+                  course,
+                  user.userId
+                )}/${func.getTotalLessons(course)} bài học`}
+            </p>
+          </div>
+        </div>
+      </div>
       <div className={cx("lessons")}>
         <div className={cx("content")}>
           <ReactPlayer
             ref={playerRef}
             loading="lazy"
             playing={true}
-            width={900}
-            height={506}
+            width={850}
+            height={472}
             controls={true}
             url={lesson.resources}
             onProgress={handleProgress}
@@ -118,6 +144,7 @@ const Learn = () => {
         </div>
         <div className={cx("menu")}>
           <div className={cx("list-Chapter")}>
+            <h2 className={cx("title-lesson")}>NỘI DUNG BÀI HỌC</h2>
             {course?.chapters.map((chapter) => (
               <div key={chapter._id}>
                 <div className={cx("chapter")}>

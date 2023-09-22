@@ -20,7 +20,7 @@ const publicRoutes = [
   {
     path: "/learning/:courseId",
     component: Learn,
-    layout: HeaderOnly,
+    layout: null,
   },
   { path: "/courses/:courseId", component: CourseDetails },
   { path: "/products", component: ProductsPage },
