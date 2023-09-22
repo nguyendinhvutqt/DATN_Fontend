@@ -1,0 +1,17 @@
+.wrapper {
+  font-size: 1.6rem;
+  font-weight: 500;
+  min-width: 100px;
+  padding: 9px 16px;
+  border-radius: 4px;
+}
+
+.primary {
+  background-color: #ccc;
+  color: black;
+
+  &:hover {
+    background-color: #29303b;
+    color: #fff;
+  }
+}

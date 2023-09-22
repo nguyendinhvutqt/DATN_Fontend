@@ -1,8 +1,8 @@
 import React from "react";
 import classNames from "classnames/bind";
-import { Header } from "./Header";
-import { Sidebar } from "./Sidebar";
+import { Header } from "../components/Header";
 import styles from "./style.module.scss";
+import { Sidebar } from "../components/Sidebar";
 
 const cx = classNames.bind(styles);
 

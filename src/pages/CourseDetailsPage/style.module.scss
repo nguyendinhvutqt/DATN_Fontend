@@ -1,0 +1,67 @@
+.wrapper {
+  padding: 16px 32px;
+  min-height: 100vh;
+}
+
+.course {
+  display: flex;
+  justify-content: center;
+}
+
+.section {
+  width: 700px;
+  max-height: 100vh;
+  overflow-y: scroll;
+}
+
+.title-course,
+.text {
+  padding: 12px;
+}
+
+.content {
+  padding: 24px 16px;
+}
+
+.list-Chapter {
+  padding-top: 16px;
+}
+
+.chapter {
+  display: flex;
+  justify-content: space-between;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  margin: 4px 0;
+  padding: 12px 24px;
+
+  .lesion {
+    background-color: #fff;
+  }
+}
+.title {
+  padding: 8px 32px;
+  text-align: left;
+  border-bottom: 0.5px solid gray;
+}
+
+.course1 {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px 12px;
+
+  .img-course {
+    width: 300px;
+  }
+
+  .btn-register-course {
+    margin: 24px 0;
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: white;
+    font-weight: 500;
+    background-color: #f16239;
+  }
+}

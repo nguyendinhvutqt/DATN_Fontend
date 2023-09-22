@@ -1,0 +1,91 @@
+.show-profile {
+  width: 250px;
+  padding: 0 12px;
+}
+
+.profile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 60px;
+
+  &::after {
+    position: absolute;
+    content: " ";
+    height: 0.5px;
+    background-color: gray;
+    bottom: 0;
+    left: 12px;
+    right: 12px;
+  }
+
+  .img-profile {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    margin-left: 12px;
+  }
+
+  .title-name {
+    padding-left: 12px;
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+}
+
+.to-profile {
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 50px;
+
+  &::after {
+    position: absolute;
+    content: " ";
+    height: 0.5px;
+    background-color: gray;
+    bottom: 0;
+    left: 12px;
+    right: 12px;
+  }
+
+  &:hover {
+    background-color: #e4e4e6;
+    cursor: pointer;
+  }
+
+  .text-link-profile {
+    font-size: 1.8rem;
+    padding-left: 12px;
+    color: black;
+  }
+}
+
+.to-logout {
+  display: flex;
+  align-items: center;
+  height: 50px;
+
+  &:hover {
+    background-color: #e4e4e6;
+    cursor: pointer;
+  }
+
+  .text-link-logout {
+    background-color: transparent;
+    font-size: 1.8rem;
+    padding-left: 12px;
+    color: black;
+  }
+}
+
+.img-avatar {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+  margin-left: 12px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
