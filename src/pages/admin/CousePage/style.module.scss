@@ -1,0 +1,45 @@
+.wrapper {
+  padding: 12px 24px;
+}
+
+.add-course {
+  margin: 24px 0;
+}
+
+.course-table {
+  width: 100%;
+
+  td,
+  th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+  }
+
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+}
+
+.td-thumbnail {
+  .thumbnail {
+    width: 150px;
+  }
+}
+
+.form-add-course {
+  p {
+    margin-left: 0;
+  }
+}
+
+.button {
+  padding: 8px 12px;
+  font-size: 1.6rem;
+  border-radius: 4px;
+  background-color: aquamarine;
+}
+
+.modal {
+  overflow-y: scroll;
+}

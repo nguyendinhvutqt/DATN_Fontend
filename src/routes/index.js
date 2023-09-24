@@ -12,9 +12,16 @@ import LoginPage from "../pages/LoginPage";
 import Blog from "../pages/BlogPage";
 import CourseDetails from "../pages/CourseDetailsPage";
 import Learn from "../pages/Learn";
+import HomePageAdmin from "../pages/admin/HomePage";
+import AdminLayout from "../layouts/admin/AdminLayout";
+import CoursesPage from "../pages/admin/CousePage";
+import BlogsPage from "../pages/admin/BlogsPage";
 
 // public route
 const publicRoutes = [
+  { path: "/admin", component: HomePageAdmin, layout: AdminLayout },
+  { path: "/admin/courses", component: CoursesPage, layout: AdminLayout },
+  { path: "/admin/blogs", component: BlogsPage, layout: AdminLayout },
   { path: routesConfig.home, component: HomePage },
   { path: "/blog", component: Blog },
   {

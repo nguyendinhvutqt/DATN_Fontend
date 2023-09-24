@@ -35,7 +35,6 @@ const Learn = () => {
 
   useEffect(() => {
     try {
-      console.log("apiCalled lesson");
       const fetchApi = async () => {
         const result = await lessonService.getById(lessonId);
         if (result.status === "OK") {
@@ -49,7 +48,6 @@ const Learn = () => {
   }, [lessonId]);
 
   useEffect(() => {
-    console.log("apiCalled course");
     // Gọi API để lấy thông tin khoá học
     const { courseId } = params;
     const fetchCourse = async () => {
@@ -69,7 +67,6 @@ const Learn = () => {
   }, [isLearned, apiCalled]);
 
   const handleProgress = (state) => {
-    console.log("handleProgress");
     // Kiểm tra xem thời gian hiện tại của video đã đạt đến 3/4 hay chưa
     if (state.played >= 0.75 && !apiCalled && !newLesson) {
       setApiCalled(true);

@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import classNames from "classnames/bind";
 import styles from "./style.module.scss";
 
 import * as courseService from "../../services/courseService";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const cx = classNames.bind(styles);
-
-CourseDetails.propTypes = {};
 
 function CourseDetails(props) {
   const [courseData, setCourseData] = useState(null);
