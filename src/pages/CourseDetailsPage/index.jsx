@@ -50,9 +50,10 @@ function CourseDetails(props) {
           <div className={cx("section")}>
             <div className={cx("description")}>
               <h1 className={cx("title-course")}>{courseData.title}</h1>
-              <div>
-                <span className={cx("text")}>{courseData.description}</span>
-              </div>
+              <div
+                className={cx("text")}
+                dangerouslySetInnerHTML={{ __html: courseData.description }}
+              />
             </div>
             <div className={cx("content")}>
               <h2>NỘI DUNG BÀI HỌC</h2>

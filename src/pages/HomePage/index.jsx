@@ -15,11 +15,24 @@ export const HomePage = () => {
   const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
-    const fetchApi = async () => {
-      const result = await courseService.courses();
-      setCourses(result.data);
-    };
-    fetchApi();
+    // Kiểm tra xem có dữ liệu trong Local Storage không
+    const storedCourses = JSON.parse(localStorage.getItem("courses"));
+    if (storedCourses) {
+      setCourses(storedCourses);
+    } else {
+      const fetchApi = async () => {
+        try {
+          const result = await courseService.courses();
+          setCourses(result.data);
+          // Lưu vào Local Storage
+          localStorage.setItem("courses", JSON.stringify(result.data));
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      // Nếu không có, thực hiện lấy từ API
+      fetchApi();
+    }
   }, []);
   return (
     <div className={cx("wrapper")}>
@@ -47,28 +60,29 @@ export const HomePage = () => {
         </div>
 
         <div className={cx("list-course")}>
-          {courses.map((course) => (
-            <div key={course._id}>
-              {course?.chapters[0]?.lessons && (
-                <div className={cx("course")}>
-                  <Link
-                    to={
-                      course.students.includes(user?.userId)
-                        ? `learning/${course._id}?id=${course?.chapters[0]?.lessons[0]._id}`
-                        : `courses/${course._id}`
-                    }
-                  >
-                    <img
-                      className={cx("thumbnail-course")}
-                      src={process.env.REACT_APP_API_BASE + course.thumbnail}
-                      alt=""
-                    />
-                    <p className={cx("title-course")}>{course.title}</p>
-                  </Link>
-                </div>
-              )}
-            </div>
-          ))}
+          {courses &&
+            courses.map((course) => {
+              return (
+                course?.chapters[0]?.lessons && (
+                  <div key={course._id} className={cx("course")}>
+                    <Link
+                      to={
+                        course.students.includes(user?.userId)
+                          ? `learning/${course._id}?id=${course?.chapters[0]?.lessons[0]._id}`
+                          : `courses/${course._id}`
+                      }
+                    >
+                      <img
+                        className={cx("thumbnail-course")}
+                        src={process.env.REACT_APP_API_BASE + course.thumbnail}
+                        alt=""
+                      />
+                      <p className={cx("title-course")}>{course.title}</p>
+                    </Link>
+                  </div>
+                )
+              );
+            })}
         </div>
       </div>
       <div className={cx("wrapper-content")}>

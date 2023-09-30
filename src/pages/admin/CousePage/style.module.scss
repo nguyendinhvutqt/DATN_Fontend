@@ -33,11 +33,18 @@
   }
 }
 
-.button {
+.block-action {
+  display: flex;
+  align-items: center;
+}
+
+.btn {
   padding: 8px 12px;
   font-size: 1.6rem;
   border-radius: 4px;
-  background-color: aquamarine;
+  background-color: gray;
+  margin: 4px;
+  color: #fff;
 }
 
 .modal {

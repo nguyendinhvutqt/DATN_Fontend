@@ -1,0 +1,85 @@
+.wrapper {
+  padding: 16px 32px;
+}
+
+.innner {
+  width: 1150px;
+  margin: 0 auto;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+
+  padding: 8px 24px;
+  width: 1150px;
+  border-bottom: 1px solid #f1f1f2;
+
+  .icon-back {
+    color: black;
+  }
+
+  .name-course {
+    margin-left: 24px;
+  }
+}
+
+.course {
+  width: 1150px;
+  display: flex;
+}
+
+.sidebar {
+  width: 400px;
+}
+
+.content {
+  flex: 1;
+  background-color: aqua;
+}
+
+.list-Chapter {
+  padding-top: 16px;
+}
+
+.chapter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  margin: 4px 0;
+  padding: 12px 24px;
+}
+.icon-add-lesson {
+  margin-left: 8px;
+  font-size: 1.6rem;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+.lesion {
+  background-color: #fff;
+}
+.title {
+  padding: 8px 32px;
+  text-align: left;
+  border-bottom: 1px solid #dedfe0;
+}
+
+.div-add-chapter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px 0;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.icon-add-chapter {
+  margin-right: 8px;
+  font-size: 1.6rem;
+}

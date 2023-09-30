@@ -10,18 +10,27 @@ import routesConfig from "../configs/routes";
 import { RegisterPage } from "../pages/register";
 import LoginPage from "../pages/LoginPage";
 import Blog from "../pages/BlogPage";
-import CourseDetails from "../pages/CourseDetailsPage";
+import CourseDetailsUser from "../pages/CourseDetailsPage";
 import Learn from "../pages/Learn";
 import HomePageAdmin from "../pages/admin/HomePage";
 import AdminLayout from "../layouts/admin/AdminLayout";
 import CoursesPage from "../pages/admin/CousePage";
 import BlogsPage from "../pages/admin/BlogsPage";
+import CourseDetailsAdmin from "../pages/admin/CourseDetails";
 
 // public route
 const publicRoutes = [
+  //admin
   { path: "/admin", component: HomePageAdmin, layout: AdminLayout },
   { path: "/admin/courses", component: CoursesPage, layout: AdminLayout },
   { path: "/admin/blogs", component: BlogsPage, layout: AdminLayout },
+  {
+    path: "/admin/courses/:courseId",
+    component: CourseDetailsAdmin,
+    layout: null,
+  },
+
+  //user
   { path: routesConfig.home, component: HomePage },
   { path: "/blog", component: Blog },
   {
@@ -29,7 +38,7 @@ const publicRoutes = [
     component: Learn,
     layout: null,
   },
-  { path: "/courses/:courseId", component: CourseDetails },
+  { path: "/courses/:courseId", component: CourseDetailsUser },
   { path: "/products", component: ProductsPage },
   { path: "/profile", component: Profile, layout: HeaderOnly },
   { path: "/sign-in", component: LoginPage, layout: null },

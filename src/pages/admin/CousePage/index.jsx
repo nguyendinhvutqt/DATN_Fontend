@@ -1,22 +1,48 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import classNames from "classnames/bind";
 
 import styles from "./style.module.scss";
 import * as courseService from "../../../services/courseService";
 import ModalAddCourse from "./ModalAddCourse";
+import ModalDeleteCourse from "./ModalDeleteCourse";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleInfo,
+  faPenToSquare,
+  faTrash,
+} from "@fortawesome/free-solid-svg-icons";
+
+import ModalEditCourse from "./ModalEditCourse";
+import Paginate from "../../../components/Paginate";
+import { Link } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
 const CoursesPage = () => {
+  // lấy các khoá học
   const [courses, setCourses] = useState([]);
-  const [modalIsOpen, setModalIsOpen] = useState(false);
+  // thêm khoá học
+  const [openModalAdd, setOpenModalAdd] = useState(false);
+  // trạng thái lỗi
+  const [showError, setShowError] = useState(false);
+  // xoá khoá học
+  const [openModalDel, setOpenModalDel] = useState(false);
+  const [courseId, setCourseId] = useState(null);
+  // sửa khoá học
+  const [openModalEdit, setOpenModalEdit] = useState(false);
+  const [courseEdit, setCourseEdit] = useState(null);
+  // phân trang
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
 
-  const fetchApi = async () => {
+  const fetchApi = async (currentPage) => {
     try {
-      const result = await courseService.courses();
+      const result = await courseService.coursesAndPaginate(currentPage);
       if (result.status === "OK") {
         setCourses(result.data);
+        setTotalPage(result.totalPage);
       }
     } catch (error) {
       console.log(error);
@@ -24,29 +50,41 @@ const CoursesPage = () => {
   };
 
   useEffect(() => {
-    fetchApi();
-  }, []);
-
-  const openModal = () => {
-    setModalIsOpen(true);
-  };
+    fetchApi(currentPage);
+  }, [currentPage]);
 
   const closeModal = () => {
-    setModalIsOpen(false);
+    setOpenModalAdd(false);
+    setOpenModalDel(false);
+    setOpenModalEdit(false);
+    setShowError(false);
   };
 
-  const handleCourseAdded = () => {
-    // This function will be called when a course is successfully added.
-    // You can use it to refetch the courses.
+  const handleCourse = () => {
     fetchApi();
-    closeModal(); // Close the modal after adding the course.
+    closeModal();
+    setShowError(false);
+  };
+
+  const handleShowError = () => {
+    setShowError(true);
+  };
+
+  const handlePageClick = (e) => {
+    setCurrentPage(e.selected + 1);
+  };
+
+  const handleInfo = (course) => {
+    console.log("course: ", course);
   };
 
   return (
     <div className={cx("wrapper")}>
       <h2>DANH SÁCH KHOÁ HỌC</h2>
       <div>
-        <button onClick={openModal}>Thêm khoá học</button>
+        <button className={cx("btn")} onClick={() => setOpenModalAdd(true)}>
+          Thêm khoá học
+        </button>
       </div>
       <div className={cx("course-list")}>
         <table className={cx("course-table")}>
@@ -54,7 +92,7 @@ const CoursesPage = () => {
             <tr>
               <th>Tên khoá học</th>
               <th>Hình ảnh</th>
-              <th>zsfc</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -68,25 +106,68 @@ const CoursesPage = () => {
                       src={`${
                         process.env.REACT_APP_API_BASE + course.thumbnail
                       }`}
-                      alt=""
+                      alt="hình ảnh"
                     />
                   </td>
                   <td>
-                    <button>Sửa</button>
-                    <button>Chi tiết</button>
+                    <div className={cx("block-action")}>
+                      <button
+                        onClick={() => {
+                          setCourseEdit(course);
+                          setOpenModalEdit(true);
+                        }}
+                        className={cx("btn")}
+                      >
+                        <FontAwesomeIcon icon={faPenToSquare} />
+                      </button>
+                      <button
+                        onClick={() => {
+                          setCourseId(course._id);
+                          setOpenModalDel(true);
+                        }}
+                        className={cx("btn")}
+                      >
+                        <FontAwesomeIcon icon={faTrash} />
+                      </button>
+                      <Link
+                        to={`/admin/courses/${course._id}`}
+                        className={cx("btn")}
+                        onClick={() => handleInfo(course)}
+                      >
+                        <FontAwesomeIcon icon={faCircleInfo} />
+                      </Link>
+                    </div>
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
+        <Paginate onClickPage={handlePageClick} totalPage={totalPage} />
       </div>
       <div className={cx("modal")}>
         <ModalAddCourse
-          isOpen={modalIsOpen}
+          isOpen={openModalAdd}
+          showError={showError}
+          onShowError={handleShowError}
           onRequestClose={closeModal}
-          onCourseAdded={handleCourseAdded}
+          onCourseAdded={handleCourse}
+        />
+        <ModalDeleteCourse
+          isOpen={openModalDel}
+          courseIdToDelete={courseId}
+          onRequestClose={closeModal}
+          onCourseDeleted={handleCourse}
+        />
+        <ModalEditCourse
+          isOpen={openModalEdit}
+          showError={showError}
+          onShowError={handleShowError}
+          courseEdit={courseEdit}
+          onRequestClose={closeModal}
+          onCourseEdited={handleCourse}
         />
       </div>
+      <ToastContainer />
     </div>
   );
 };
