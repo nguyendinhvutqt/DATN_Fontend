@@ -8,3 +8,12 @@ export const addComment = async (lessonId, data) => {
     return error;
   }
 };
+
+export const getComments = async (lessonId, data) => {
+  try {
+    const response = await axios.get(`comments/${lessonId}/comment`);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};

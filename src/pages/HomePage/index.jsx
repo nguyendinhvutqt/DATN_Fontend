@@ -13,27 +13,17 @@ export const HomePage = () => {
   const [courses, setCourses] = useState([]);
 
   const { user } = useSelector((state) => state.auth);
-  console.log("user: ", user);
 
   useEffect(() => {
-    // Kiểm tra xem có dữ liệu trong Local Storage không
-    const storedCourses = JSON.parse(localStorage.getItem("courses"));
-    if (storedCourses) {
-      setCourses(storedCourses);
-    } else {
-      const fetchApi = async () => {
-        try {
-          const result = await courseService.courses();
-          setCourses(result.data);
-          // Lưu vào Local Storage
-          localStorage.setItem("courses", JSON.stringify(result.data));
-        } catch (error) {
-          console.log(error);
-        }
-      };
-      // Nếu không có, thực hiện lấy từ API
-      fetchApi();
-    }
+    const fetchApi = async () => {
+      try {
+        const result = await courseService.courses();
+        setCourses(result.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchApi();
   }, []);
   return (
     <div className={cx("wrapper")}>

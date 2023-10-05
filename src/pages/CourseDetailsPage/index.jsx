@@ -22,6 +22,7 @@ function CourseDetails(props) {
 
     const fetchApi = async () => {
       const result = await courseService.course(courseId);
+      console.log(result);
       setCourseData(result.data);
       // setLoading(false);
     };

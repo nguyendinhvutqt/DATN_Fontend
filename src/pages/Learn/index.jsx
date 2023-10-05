@@ -131,14 +131,17 @@ const Learn = () => {
             ref={playerRef}
             loading="lazy"
             playing={true}
-            width={850}
+            width={800}
             height={472}
             controls={true}
             url={lesson.resources}
             onProgress={handleProgress}
             onEnded={handleVideoEnd}
           />
-          <div className={cx("description")}>{lesson.content}</div>
+          <div
+            className={cx("description")}
+            dangerouslySetInnerHTML={{ __html: lesson.content }}
+          ></div>
           <div className={cx("comment")}>
             <Comment lessonId={lessonId} />
           </div>

@@ -1,24 +1,56 @@
 import React, { useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./style.module.scss";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash, faUser } from "@fortawesome/free-solid-svg-icons";
 import logo from "../../assets/images/l.png";
-
+import * as userService from "../../services/userService";
 
 const cx = classNames.bind(styles);
 
 export const RegisterPage = () => {
+  const [username, setUsername] = useState("");
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showCfPassword, setShowCfPassword] = useState(false);
+
+  const navigate = useNavigate();
+
+  const register = async () => {
+    try {
+      const data = {
+        username,
+        name,
+        password,
+        confirmPassword,
+      };
+      const result = await userService.register(data);
+      console.log(result);
+      if (result.status === "OK") {
+        setName("");
+        setUsername("");
+        setPassword("");
+        setConfirmPassword("");
+        navigate("/sign-in");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleRegister = () => {
+    register();
+  };
 
   return (
     <div className={cx("wrapper")}>
       <div className={cx("back")}></div>
       <div className={cx("login")}>
         <div className={cx("content")}>
-        <img className={cx("img")} src={logo} alt="dfdsf" />
+          <img className={cx("img")} src={logo} alt="dfdsf" />
         </div>
         <div className={cx("home")}>
           <div className={cx("account")}>
@@ -31,8 +63,20 @@ export const RegisterPage = () => {
               className={cx("input-email")}
               autoComplete="new-password"
               required
+              onChange={(e) => setUsername(e.target.value)}
             />
             <label htmlFor="input">Tên đăng nhập</label>
+          </div>
+          <div className={cx("input")}>
+            <FontAwesomeIcon className={cx("icon")} icon={faUser} />
+            <input
+              type="text"
+              className={cx("input-email")}
+              autoComplete="new-password"
+              required
+              onChange={(e) => setName(e.target.value)}
+            />
+            <label htmlFor="input">Họ và tên</label>
           </div>
           <div className={cx("input")}>
             <div onClick={() => setShowPassword(!showPassword)}>
@@ -48,6 +92,7 @@ export const RegisterPage = () => {
               className={cx("input-email")}
               autoComplete="new-password"
               required
+              onChange={(e) => setPassword(e.target.value)}
             />
             <label htmlFor="input">Mật khẩu</label>
           </div>
@@ -65,11 +110,14 @@ export const RegisterPage = () => {
               className={cx("input-email")}
               autoComplete="new-password"
               required
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
             <label htmlFor="input">Nhập lại mật khẩu</label>
           </div>
           <div className={cx("input")}>
-            <button className={cx("button")}>ĐĂNG KÍ</button>
+            <button onClick={handleRegister} className={cx("button")}>
+              ĐĂNG KÍ
+            </button>
           </div>
           <div className={cx("log")}>
             <p>Bạn đã có tài khoản</p>

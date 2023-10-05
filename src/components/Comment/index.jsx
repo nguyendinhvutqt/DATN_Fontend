@@ -18,16 +18,14 @@ Comment.propTypes = {};
 
 function Comment(props) {
   const { lessonId } = props;
+  const room = lessonId;
   const { user } = useSelector((state) => state.auth);
-  console.log("user: ", user);
-  console.log("lessonID: ", lessonId);
-
-  //Room State
-  //   const [room, setRoom] = useState("");
 
   // Messages States
   const [comment, setComment] = useState("");
-  //   const [messageReceived, setMessageReceived] = useState("");
+  const [comments, setComments] = useState("");
+  const [newComment, setNewComment] = useState("");
+  const [currentRoom, setCurrentRoom] = useState(room);
 
   const inputRef = useRef();
 
@@ -36,33 +34,60 @@ function Comment(props) {
     inputRef.current.focus();
   };
 
+  useEffect(() => {
+    // Khi component được mount, người dùng tham gia phòng bình luận của bài học
+    socket.emit("join-room", room);
+
+    // Lắng nghe sự kiện khi có bình luận mới từ server
+    socket.on("new-comment", (data) => {
+      setNewComment(data);
+    });
+  }, [room]);
+
   const fetchApi = async () => {
-    const data = {
-      userId: user.userId,
-      comment: comment,
-    };
-    const result = await commentService.addComment(lessonId, data);
-    console.log("resulr: ", result);
-    if (result.status === "OK") {
-      socket.emit("comment", result.data.comments);
+    try {
+      const data = {
+        userId: user.userId,
+        comment: comment,
+      };
+      const result = await commentService.addComment(lessonId, data);
+      if (result.status === "OK") {
+        setComment("");
+        setComments(result.data.comments);
+        // socket.emit("comment", result.data.comments);
+
+        // Gửi bình luận lên server trong phòng (bài học) tương ứng
+        socket.emit("comment", { room, comments: result.data.comments });
+
+        // Xóa nội dung ô nhập bình luận
+        setComment("");
+      }
+    } catch (error) {
+      console.log("error: ", error);
     }
   };
 
   const handleSubmit = () => {
+    fetchApi();
+  };
+  const getComment = async (lessonId, currentRoom) => {
     try {
-      fetchApi();
-    } catch (error) {
-      console.log("error: ", error);
-    }
-    // socket.emit("send-message", { message, lessonId });
+      const result = await commentService.getComments(lessonId);
+      if (result.status === "OK") {
+        socket.emit("leave-room", currentRoom);
+        setCurrentRoom(lessonId);
+        socket.emit("join-room", lessonId);
+
+        setNewComment("");
+        setComments(result.data.comments);
+      }
+    } catch (error) {}
   };
 
-  //   useEffect(() => {
-  //     socket.on("receive_message", (data) => {
-  //       setMessageReceived(data.message);
-  //     });
-  //     // eslint-disable-next-line react-hooks/exhaustive-deps
-  //   }, [socket]);
+  useEffect(() => {
+    getComment(lessonId, currentRoom);
+  }, [lessonId, currentRoom]);
+
   return (
     <div className={cx("wrapper")}>
       <div className={cx("wrapper-input")}>
@@ -86,40 +111,34 @@ function Comment(props) {
         </button>
       </div>
       <div className={cx("wrapper-comment")}>
-        <div className={cx("comment")}>
-          <img className={cx("avatar")} src={avatar} alt="" />
-          <div className={cx("content-comment")}>
-            <strong>âsdasd</strong>
-            <p>sadasdas</p>
-          </div>
-        </div>
-        <div className={cx("comment")}>
-          <div className={cx("avatar")}>
-            <img style={{ width: "30px" }} src={avatar} alt="" />
-          </div>
-          <div className={cx("content-comment")}>
-            <strong>âsdasd</strong>
-            <p>sadasdas</p>
-          </div>
-        </div>
-        <div className={cx("comment")}>
-          <div className={cx("avatar")}>
-            <img style={{ width: "30px" }} src={avatar} alt="" />
-          </div>
-          <div className={cx("content-comment")}>
-            <strong>âsdasd</strong>
-            <p>sadasdas</p>
-          </div>
-        </div>
-        <div className={cx("comment")}>
-          <div className={cx("avatar")}>
-            <img style={{ width: "30px" }} src={avatar} alt="" />
-          </div>
-          <div className={cx("content-comment")}>
-            <strong>âsdasd</strong>
-            <p>sadasdas</p>
-          </div>
-        </div>
+        {newComment.length > 0
+          ? newComment.map((comment) => (
+              <div key={comment._id} className={cx("comment")}>
+                <img
+                  className={cx("avatar")}
+                  src={process.env.REACT_APP_API_BASE + comment.userId.avatar}
+                  alt="avatar"
+                />
+                <div className={cx("content-comment")}>
+                  <strong>{comment.userId.name}</strong>
+                  <p>{comment?.comment}</p>
+                </div>
+              </div>
+            ))
+          : comments &&
+            comments.map((comment) => (
+              <div key={comment._id} className={cx("comment")}>
+                <img
+                  className={cx("avatar")}
+                  src={process.env.REACT_APP_API_BASE + comment.userId.avatar}
+                  alt="avatar"
+                />
+                <div className={cx("content-comment")}>
+                  <strong>{comment.userId.name}</strong>
+                  <p>{comment?.comment}</p>
+                </div>
+              </div>
+            ))}
       </div>
     </div>
   );

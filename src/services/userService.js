@@ -9,6 +9,15 @@ export const login = async (username, password) => {
   }
 };
 
+export const register = async (data) => {
+  try {
+    const res = await axios.post("users/sign-up", data);
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const getCourseByUserId = async (userId) => {
   try {
     const res = await axios.get(`users/course/${userId}`);
