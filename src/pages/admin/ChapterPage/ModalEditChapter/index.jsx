@@ -8,28 +8,30 @@ import * as chapterService from "../../../../services/chapterService";
 import { toast } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { useEffect } from "react";
 
 const cx = classNames.bind(styles);
 
-ModalAddChapter.propTypes = {
+ModalEditChapter.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onRequestClose: PropTypes.func.isRequired,
 };
 
-function ModalAddChapter(props) {
+function ModalEditChapter(props) {
   const {
     isOpen,
     onRequestClose,
-    courseId,
-    onChapterAdded,
+    chapter,
+    onChapterEdited,
     onError,
     onShowError,
   } = props;
 
-  const [titleChapter, setTitleChapter] = useState("");
+  const [titleChapter, setTitleChapter] = useState("a");
+  const [chapterId, setChapterId] = useState(null);
   const [error, setError] = useState("");
   const [laoding, setLoading] = useState(false);
-
+  console.log("titleChapter: ", titleChapter);
   const customStyles = {
     content: {
       width: "700px",
@@ -43,18 +45,25 @@ function ModalAddChapter(props) {
     },
   };
 
-  const handleSubmit = () => {
+  useEffect(() => {
+    if (isOpen) {
+      setTitleChapter(chapter.title);
+      setChapterId(chapter._id);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chapter]);
+
+  function handleSubmit() {
     try {
       setLoading(true);
       const fetchApi = async () => {
-        const result = await chapterService.addChapter(courseId, {
+        const result = await chapterService.editChapter(chapterId, {
           title: titleChapter,
         });
-        console.log(result);
         if (result.status === "OK") {
           setTitleChapter("");
-          toast.success("Thêm chương thành công!");
-          onChapterAdded(result.data);
+          toast.success("Sửa chương thành công!");
+          onChapterEdited(result.data);
           setLoading(false);
         } else {
           setError(result.message);
@@ -66,7 +75,7 @@ function ModalAddChapter(props) {
     } catch (error) {
       console.log("error", error);
     }
-  };
+  }
 
   return (
     <Modal
@@ -76,7 +85,7 @@ function ModalAddChapter(props) {
       ariaHideApp={false}
       contentLabel="Example Modal"
     >
-      <h2>Thêm mới chương</h2>
+      <h2>Sửa chương</h2>
       {onError && error && (
         <div className={cx("error")}>
           <strong>{error}</strong>
@@ -102,7 +111,7 @@ function ModalAddChapter(props) {
             Đóng
           </button>
           <button className={cx("btn", "btn-primary")} onClick={handleSubmit}>
-            {laoding ? "Đang thêm..." : "Xác nhận"}
+            {laoding ? "Đang sửa..." : "Xác nhận"}
           </button>
         </div>
       </div>
@@ -110,4 +119,4 @@ function ModalAddChapter(props) {
   );
 }
 
-export default ModalAddChapter;
+export default ModalEditChapter;

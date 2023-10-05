@@ -13,6 +13,7 @@ export const HomePage = () => {
   const [courses, setCourses] = useState([]);
 
   const { user } = useSelector((state) => state.auth);
+  console.log("user: ", user);
 
   useEffect(() => {
     // Kiểm tra xem có dữ liệu trong Local Storage không

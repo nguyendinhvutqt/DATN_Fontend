@@ -12,11 +12,11 @@ const Paginate = (props) => {
     <>
       <ReactPaginate
         breakLabel="..."
-        nextLabel="next >"
+        nextLabel="sau >"
         onPageChange={onClickPage}
         pageRangeDisplayed={3}
         pageCount={totalPage}
-        previousLabel="< previous"
+        previousLabel="< trước"
         renderOnZeroPageCount={null}
         pageClassName={cx("page-item")}
         pageLinkClassName={cx("page-link")}

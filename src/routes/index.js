@@ -27,7 +27,7 @@ const publicRoutes = [
   {
     path: "/admin/courses/:courseId",
     component: CourseDetailsAdmin,
-    layout: null,
+    layout: AdminLayout,
   },
 
   //user

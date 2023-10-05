@@ -9,6 +9,15 @@ export const addChapter = async (courseId, data) => {
   }
 };
 
+export const editChapter = async (chapterId, data) => {
+  try {
+    const response = await axios.put(`chapters/${chapterId}`, data);
+    return response;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const delChapter = async (chapterId) => {
   try {
     const response = await axios.delete(`chapters/${chapterId}`);

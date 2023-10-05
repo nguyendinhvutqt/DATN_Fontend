@@ -1,21 +1,21 @@
-import React, { useState } from "react";
+import React from "react";
 import PropTypes from "prop-types";
 import Modal from "react-modal";
 import "react-quill/dist/quill.snow.css";
 import classNames from "classnames/bind";
 import styles from "./style.module.scss";
-import * as chapterService from "../../../../services/chapterService";
+import * as lessonService from "../../../../services/lessonService";
 import { toast } from "react-toastify";
 
 const cx = classNames.bind(styles);
 
-ModalDeleteChapter.propTypes = {
+ModalDeleteLesson.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onRequestClose: PropTypes.func.isRequired,
 };
 
-function ModalDeleteChapter(props) {
-  const { isOpen, onRequestClose, chapterId, onChapterDeleted } = props;
+function ModalDeleteLesson(props) {
+  const { isOpen, onRequestClose, lessonId, onLessonDeleted } = props;
   const customStyles = {
     content: {
       width: "400px",
@@ -28,18 +28,14 @@ function ModalDeleteChapter(props) {
     },
   };
 
-  const [loading, setLoading] = useState(false);
-
   const handleDeleteCourse = () => {
     try {
-      setLoading(true);
       const fetchApi = async () => {
-        const result = await chapterService.delChapter(chapterId);
+        const result = await lessonService.deleteLesson(lessonId);
+        console.log(result);
         if (result.status === "OK") {
-          toast.success("Xoá chương học thành công!");
-
-          onChapterDeleted(chapterId);
-          setLoading(false);
+          toast.success("Xoá bài học thành công!");
+          onLessonDeleted(lessonId);
         }
       };
       fetchApi();
@@ -56,7 +52,7 @@ function ModalDeleteChapter(props) {
       ariaHideApp={false}
       contentLabel="Example Modal"
     >
-      <h2>Bạn có muốn xoá khoá học?</h2>
+      <h2>Bạn có muốn xoá bài học?</h2>
 
       <div className={cx("box-btn")}>
         <button className={cx("btn")} onClick={onRequestClose}>
@@ -66,11 +62,11 @@ function ModalDeleteChapter(props) {
           className={cx("btn", "btn-primary")}
           onClick={handleDeleteCourse}
         >
-          {loading ? "Đang xoá..." : "Xác nhận"}
+          Xác nhận
         </button>
       </div>
     </Modal>
   );
 }
 
-export default ModalDeleteChapter;
+export default ModalDeleteLesson;

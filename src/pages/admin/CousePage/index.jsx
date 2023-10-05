@@ -82,7 +82,10 @@ const CoursesPage = () => {
     <div className={cx("wrapper")}>
       <h2>DANH SÁCH KHOÁ HỌC</h2>
       <div>
-        <button className={cx("btn")} onClick={() => setOpenModalAdd(true)}>
+        <button
+          className={cx("btn", "btn-primary")}
+          onClick={() => setOpenModalAdd(true)}
+        >
           Thêm khoá học
         </button>
       </div>
@@ -90,9 +93,9 @@ const CoursesPage = () => {
         <table className={cx("course-table")}>
           <thead>
             <tr>
-              <th>Tên khoá học</th>
-              <th>Hình ảnh</th>
-              <th></th>
+              <th className={cx("th-title")}>Tên khoá học</th>
+              <th className={cx("th-image")}>Hình ảnh</th>
+              <th className={cx("th-action")}></th>
             </tr>
           </thead>
           <tbody>
@@ -111,31 +114,46 @@ const CoursesPage = () => {
                   </td>
                   <td>
                     <div className={cx("block-action")}>
-                      <button
-                        onClick={() => {
-                          setCourseEdit(course);
-                          setOpenModalEdit(true);
-                        }}
-                        className={cx("btn")}
-                      >
-                        <FontAwesomeIcon icon={faPenToSquare} />
-                      </button>
-                      <button
-                        onClick={() => {
-                          setCourseId(course._id);
-                          setOpenModalDel(true);
-                        }}
-                        className={cx("btn")}
-                      >
-                        <FontAwesomeIcon icon={faTrash} />
-                      </button>
-                      <Link
-                        to={`/admin/courses/${course._id}`}
-                        className={cx("btn")}
-                        onClick={() => handleInfo(course)}
-                      >
-                        <FontAwesomeIcon icon={faCircleInfo} />
-                      </Link>
+                      <div className={cx("btn-icon")}>
+                        <button
+                          onClick={() => {
+                            setCourseEdit(course);
+                            setOpenModalEdit(true);
+                          }}
+                          className={cx("action")}
+                        >
+                          <FontAwesomeIcon
+                            className={cx("icon")}
+                            icon={faPenToSquare}
+                          />
+                        </button>
+                      </div>
+                      <div className={cx("btn-icon")}>
+                        <button
+                          onClick={() => {
+                            setCourseId(course._id);
+                            setOpenModalDel(true);
+                          }}
+                          className={cx("action")}
+                        >
+                          <FontAwesomeIcon
+                            className={cx("icon")}
+                            icon={faTrash}
+                          />
+                        </button>
+                      </div>
+                      <div className={cx("btn-icon")}>
+                        <Link
+                          to={`/admin/courses/${course._id}`}
+                          className={cx("link")}
+                          onClick={() => handleInfo(course)}
+                        >
+                          <FontAwesomeIcon
+                            className={cx("icon")}
+                            icon={faCircleInfo}
+                          />
+                        </Link>
+                      </div>
                     </div>
                   </td>
                 </tr>

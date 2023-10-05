@@ -44,9 +44,42 @@
   border-radius: 4px;
   background-color: gray;
   margin: 4px;
-  color: #fff;
+  color: black;
+  font-weight: 500;
 }
 
 .modal {
   overflow-y: scroll;
+}
+.btn-primary {
+  background-color: #bfdeff;
+}
+
+.th-title {
+  width: 500px;
+}
+
+.th-image {
+  width: 200px;
+}
+
+.th-action {
+  width: 150px;
+}
+
+.btn-icon {
+  background-color: #bfdeff;
+  padding: 8px 12px;
+  margin-left: 4px;
+  border-radius: 8px;
+}
+
+.action {
+  background-color: transparent;
+}
+
+.icon {
+  background-color: transparent;
+  color: black;
+  font-size: 1.6rem;
 }

@@ -11,14 +11,20 @@
 }
 
 .box-btn {
+  padding: 12px 0 4px 0;
   display: flex;
   justify-content: flex-end;
 }
 
 .btn {
+  font-weight: 600;
   padding: 8px 12px;
   border-radius: 4px;
   margin-right: 8px;
+}
+
+.btn-primary {
+  background-color: orange;
 }
 
 .thumbnail {
@@ -41,6 +47,6 @@
   }
 }
 
-.btn-primary {
-  background-color: orange;
+.video {
+  padding-bottom: 12px;
 }

@@ -10,6 +10,7 @@ import * as courseService from "../../services/courseService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faLessThan } from "@fortawesome/free-solid-svg-icons";
 import * as func from "../../ultils/func";
+import Comment from "../../components/Comment";
 
 const cx = classNames.bind(styles);
 
@@ -138,6 +139,9 @@ const Learn = () => {
             onEnded={handleVideoEnd}
           />
           <div className={cx("description")}>{lesson.content}</div>
+          <div className={cx("comment")}>
+            <Comment lessonId={lessonId} />
+          </div>
         </div>
         <div className={cx("menu")}>
           <div className={cx("list-Chapter")}>

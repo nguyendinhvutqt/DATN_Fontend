@@ -1,9 +1,9 @@
 .wrapper {
-  padding: 16px 32px;
+  padding: 32px;
+  flex: 1;
 }
 
 .innner {
-  width: 1150px;
   margin: 0 auto;
 }
 
@@ -12,11 +12,13 @@
   align-items: center;
 
   padding: 8px 24px;
-  width: 1150px;
   border-bottom: 1px solid #f1f1f2;
+  background-color: gray;
+  color: white;
 
   .icon-back {
-    color: black;
+    color: white;
+    font-weight: 500;
   }
 
   .name-course {
@@ -25,18 +27,18 @@
 }
 
 .course {
-  width: 1150px;
   display: flex;
+  justify-content: center;
 }
 
 .sidebar {
-  width: 400px;
+  width: 100%;
 }
 
-.content {
-  flex: 1;
-  background-color: aqua;
-}
+// .content {
+//   flex: 1;
+//   background-color: aqua;
+// }
 
 .list-Chapter {
   padding-top: 16px;
@@ -51,7 +53,7 @@
   margin: 4px 0;
   padding: 12px 24px;
 }
-.icon-add-lesson {
+.icon-lesson {
   margin-left: 8px;
   font-size: 1.6rem;
 
@@ -61,14 +63,17 @@
 }
 .lesion {
   background-color: #fff;
+  border-bottom: 1px solid #dedfe0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 32px;
 }
 .title {
-  padding: 8px 32px;
   text-align: left;
-  border-bottom: 1px solid #dedfe0;
 }
 
-.div-add-chapter {
+.div-chapter {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -79,7 +84,7 @@
   }
 }
 
-.icon-add-chapter {
+.icon-chapter {
   margin-right: 8px;
   font-size: 1.6rem;
 }

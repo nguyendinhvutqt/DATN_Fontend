@@ -1,0 +1,49 @@
+.wrapper {
+  flex: 1;
+}
+
+.title {
+  padding: 24px;
+  text-align: center;
+}
+
+.statistical {
+  padding: 12px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+
+  .courses,
+  .blogs,
+  .users {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 36px 24px;
+    border: 1px solid #f1f1f2;
+    border-radius: 8px;
+    box-shadow: -5px 5px 5px gray;
+  }
+
+  .courses {
+    background-color: bisque;
+  }
+  .blogs {
+    background-color: aquamarine;
+  }
+  .users {
+    background-color: cadetblue;
+  }
+}
+
+.icon {
+  font-size: 3rem;
+  color: black;
+}
+
+.text {
+  margin-left: 8px;
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: black;
+}

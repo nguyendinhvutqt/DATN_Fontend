@@ -11,7 +11,7 @@ function LocalStorageCleanup() {
       // localStorage.clear();
     };
 
-    window.addEventListener("beforeunload", cleanupLocalStorage);
+    // window.addEventListener("beforeunload", cleanupLocalStorage);
 
     return () => {
       // Loại bỏ lắng nghe sự kiện trước khi component unmount

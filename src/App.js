@@ -32,7 +32,7 @@ function App() {
           );
         })}
       </Routes>
-      <LocalStorageCleanup />
+      {/* <LocalStorageCleanup /> */}
     </div>
   );
 }
