@@ -146,7 +146,6 @@ const CourseDetails = () => {
         }),
       };
     });
-    console.log("update: ", updatedChapters);
 
     setChapters(updatedChapters);
     setIsShowEditLesson(false);

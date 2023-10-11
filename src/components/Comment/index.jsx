@@ -9,8 +9,11 @@ import avatar from "../../assets/images/avatar-default.png";
 import { useEffect } from "react";
 import * as commentService from "../../services/commentService";
 import { useSelector } from "react-redux";
+import CommentUser from "../CommentUser";
+import ReplyComment from "../ReplyComment";
+import CommentUserReply from "../CommentUserReply";
 
-const socket = io("http://localhost:3001");
+const socket = io(process.env.REACT_APP_API_BASE);
 
 const cx = classNames.bind(styles);
 
@@ -26,6 +29,10 @@ function Comment(props) {
   const [comments, setComments] = useState("");
   const [newComment, setNewComment] = useState("");
   const [currentRoom, setCurrentRoom] = useState(room);
+  const [isShowCommentReply, setIsShowCommentReply] = useState(false);
+  const [replyCommentId, setReplyCommentId] = useState(null);
+  const [replyComments, setReplyComments] = useState({});
+  const [replyCommentUser, setReplyCommentUser] = useState("");
 
   const inputRef = useRef();
 
@@ -35,6 +42,7 @@ function Comment(props) {
   };
 
   useEffect(() => {
+    console.log("room: ", room);
     // Khi component được mount, người dùng tham gia phòng bình luận của bài học
     socket.emit("join-room", room);
 
@@ -42,7 +50,15 @@ function Comment(props) {
     socket.on("new-comment", (data) => {
       setNewComment(data);
     });
-  }, [room]);
+
+    // Lắng nghe sự kiện khi có Phản hồi bình luận bình luận từ server
+    socket.on("new-reply-comment", async (data) => {
+      console.log("room1: ", data);
+      alert(room);
+    });
+  }, [room, currentRoom]);
+
+  const handleNewReplyComment = (newComment) => {};
 
   const fetchApi = async () => {
     try {
@@ -52,15 +68,10 @@ function Comment(props) {
       };
       const result = await commentService.addComment(lessonId, data);
       if (result.status === "OK") {
+        console.log("test-socket: ", result.data);
         setComment("");
-        setComments(result.data.comments);
-        // socket.emit("comment", result.data.comments);
-
-        // Gửi bình luận lên server trong phòng (bài học) tương ứng
-        socket.emit("comment", { room, comments: result.data.comments });
-
-        // Xóa nội dung ô nhập bình luận
-        setComment("");
+        setComments(result.data);
+        socket.emit("comment", { room, comments: result.data });
       }
     } catch (error) {
       console.log("error: ", error);
@@ -70,23 +81,43 @@ function Comment(props) {
   const handleSubmit = () => {
     fetchApi();
   };
+
   const getComment = async (lessonId, currentRoom) => {
     try {
       const result = await commentService.getComments(lessonId);
+      console.log("check: ", result);
       if (result.status === "OK") {
         socket.emit("leave-room", currentRoom);
         setCurrentRoom(lessonId);
         socket.emit("join-room", lessonId);
-
         setNewComment("");
-        setComments(result.data.comments);
+        setComments(result.data);
       }
-    } catch (error) {}
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
-    getComment(lessonId, currentRoom);
+    getComment(lessonId);
   }, [lessonId, currentRoom]);
+
+  const handleReplyToReplyComment = (replyCommentId, replyCommentUser) => {};
+
+  const handleReplyComment = (replyCommentId, replyCommentUser) => {
+    setReplyCommentId(replyCommentId);
+    setReplyCommentUser(replyCommentUser);
+  };
+
+  const handleShowReplyComment = () => {
+    setIsShowCommentReply(true);
+  };
+
+  const handleCloseReplyComment = () => {
+    setIsShowCommentReply(false);
+  };
+
+  let uiComment = newComment.length > 0 ? newComment : comments;
 
   return (
     <div className={cx("wrapper")}>
@@ -111,34 +142,41 @@ function Comment(props) {
         </button>
       </div>
       <div className={cx("wrapper-comment")}>
-        {newComment.length > 0
-          ? newComment.map((comment) => (
-              <div key={comment._id} className={cx("comment")}>
-                <img
-                  className={cx("avatar")}
-                  src={process.env.REACT_APP_API_BASE + comment.userId.avatar}
-                  alt="avatar"
-                />
-                <div className={cx("content-comment")}>
-                  <strong>{comment.userId.name}</strong>
-                  <p>{comment?.comment}</p>
-                </div>
+        {uiComment &&
+          uiComment.map((comment) => (
+            <div key={comment._id} className={cx("box-comment")}>
+              <CommentUser
+                comment={comment}
+                user={user}
+                onReplyComment={handleReplyComment}
+                showReplyComment={handleShowReplyComment}
+              />
+
+              <div className={cx("reply-comment")}>
+                {comment?.replies &&
+                  comment.replies.map((reply) => (
+                    <CommentUserReply
+                      commentId={comment._id}
+                      comment={reply}
+                      user={user}
+                      room={room}
+                      onReplyComment={handleReplyComment}
+                      showReplyComment={handleShowReplyComment}
+                    />
+                  ))}
               </div>
-            ))
-          : comments &&
-            comments.map((comment) => (
-              <div key={comment._id} className={cx("comment")}>
-                <img
-                  className={cx("avatar")}
-                  src={process.env.REACT_APP_API_BASE + comment.userId.avatar}
-                  alt="avatar"
+              {replyCommentId === comment._id && isShowCommentReply && (
+                <ReplyComment
+                  comment={comment}
+                  replyCommentUser={replyCommentUser}
+                  room={room}
+                  user={user}
+                  onNewReplyComment={handleNewReplyComment}
+                  closeReplyComment={handleCloseReplyComment}
                 />
-                <div className={cx("content-comment")}>
-                  <strong>{comment.userId.name}</strong>
-                  <p>{comment?.comment}</p>
-                </div>
-              </div>
-            ))}
+              )}
+            </div>
+          ))}
       </div>
     </div>
   );

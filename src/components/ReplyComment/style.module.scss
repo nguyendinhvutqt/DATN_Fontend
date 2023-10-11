@@ -1,0 +1,42 @@
+.reply-comment {
+  display: flex;
+  margin-top: 8px;
+  margin-left: 50px;
+  border-left: 1px solid orange;
+  padding-left: 8px;
+}
+
+.box-reply-comment {
+  width: 100%;
+  padding-right: 40px;
+  padding-top: 15px;
+}
+
+.box-btn {
+  display: flex;
+  padding: 8px 0;
+  justify-content: flex-end;
+  align-items: center;
+  border-bottom: 1px solid #f1f1f2;
+}
+
+.btn {
+  padding: 8px 12px;
+  background-color: gray;
+  margin: 0 4px;
+  border-radius: 8px;
+}
+
+.avatar {
+  width: 30px;
+  height: 30px;
+}
+
+.input {
+  margin-left: 12px;
+  width: 100%;
+  border: 1px solid #f1f1f2;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 1.6rem;
+}

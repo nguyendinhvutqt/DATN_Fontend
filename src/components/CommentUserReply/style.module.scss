@@ -1,0 +1,62 @@
+.avatar {
+  width: 30px;
+  height: 30px;
+}
+
+.comment {
+  width: 100%;
+  display: flex;
+  margin-bottom: 8px;
+}
+
+.content-comment {
+  padding: 8px 12px;
+  border-radius: 8px;
+  width: 100%;
+  margin-left: 12px;
+  border: 1px solid #f1f1f2;
+}
+
+.text-comment {
+  padding: 8px 0;
+}
+
+.action {
+  position: relative;
+  display: flex;
+}
+
+.active {
+  background-color: #f2f3f5;
+}
+
+.like,
+.reply {
+  color: #e87a5a;
+  margin-right: 8px;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.box-like {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  bottom: -20px;
+  right: 10px;
+  box-shadow: 0 1px 3px 0 #00000033;
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 4px;
+
+  .icon-like {
+    font-size: 1.8rem;
+  }
+
+  .number-like {
+    font-size: 1.8rem;
+    margin-left: 4px;
+  }
+}
