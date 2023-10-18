@@ -1,4 +1,4 @@
-import axios from "../ultils/axios";
+import axios, { axiosPublic } from "../ultils/axios";
 
 export const addCourse = async (data) => {
   try {

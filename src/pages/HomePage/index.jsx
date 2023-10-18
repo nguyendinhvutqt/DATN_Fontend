@@ -5,6 +5,8 @@ import { Link } from "react-router-dom";
 import banner1 from "../../assets/images/banner1.jpg";
 import SliderComponent from "../../components/Slider";
 import * as courseService from "../../services/courseService";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faUsers } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
 
 const cx = classNames.bind(styles);
@@ -12,13 +14,16 @@ const cx = classNames.bind(styles);
 export const HomePage = () => {
   const [courses, setCourses] = useState([]);
 
-  const { user } = useSelector((state) => state.auth);
+  const user = useSelector((state) => state.user);
 
   useEffect(() => {
     const fetchApi = async () => {
       try {
         const result = await courseService.courses();
-        setCourses(result.data);
+        console.log("result: ", result);
+        if (result.status === 200) {
+          setCourses(result.data);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -68,6 +73,13 @@ export const HomePage = () => {
                         src={process.env.REACT_APP_API_BASE + course.thumbnail}
                         alt=""
                       />
+                      <p className={cx("total-user")}>
+                        <FontAwesomeIcon
+                          className={cx("icon-user")}
+                          icon={faUsers}
+                        />
+                        {course?.students.length} thành viên
+                      </p>
                       <p className={cx("title-course")}>{course.title}</p>
                     </Link>
                   </div>

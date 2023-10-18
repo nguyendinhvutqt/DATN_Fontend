@@ -1,9 +1,6 @@
 import React from "react";
-import PropTypes from "prop-types";
 
-BlogsPage.propTypes = {};
-
-function BlogsPage(props) {
+function BlogsPage() {
   return <div>blogs</div>;
 }
 

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import classNames from "classnames/bind";
 import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -7,12 +6,9 @@ import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import * as commentService from "../../services/commentService";
 
 const cx = classNames.bind(styles);
-
-CommentUserReply.propTypes = {};
-
 function CommentUserReply(props) {
-  const { comment, commentId, user, onReplyComment, showReplyComment } = props;
-
+  const { comment, commentId, userId, onReplyComment, showReplyComment } =
+    props;
   const [like, setLike] = useState(0);
 
   useEffect(() => {
@@ -47,7 +43,7 @@ function CommentUserReply(props) {
       />
       <div
         className={cx("content-comment", {
-          active: comment.user?._id === user.userId,
+          active: comment.user?._id === userId,
         })}
       >
         <div>
@@ -57,7 +53,7 @@ function CommentUserReply(props) {
         <div className={cx("action")}>
           <p
             className={cx("like")}
-            onClick={() => handleLikeComment(comment?._id, user.userId)}
+            onClick={() => handleLikeComment(comment?._id, userId)}
           >
             Thích
           </p>

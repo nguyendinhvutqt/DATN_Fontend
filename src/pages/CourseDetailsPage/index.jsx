@@ -5,14 +5,14 @@ import styles from "./style.module.scss";
 import * as courseService from "../../services/courseService";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
-
 const cx = classNames.bind(styles);
 
-function CourseDetails(props) {
+function CourseDetails() {
   const [courseData, setCourseData] = useState(null);
   const navigate = useNavigate();
 
-  const { user } = useSelector((state) => state.auth);
+  // eslint-disable-next-line no-unused-vars
+  const user = useSelector((state) => state.user);
 
   let numberChapter = 0;
   let numberLesion = 0;

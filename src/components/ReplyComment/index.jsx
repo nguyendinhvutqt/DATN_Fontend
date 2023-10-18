@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import PropTypes from "prop-types";
 import classNames from "classnames/bind";
 import styles from "./style.module.scss";
 import { useState } from "react";
@@ -10,10 +9,8 @@ const socket = io(process.env.REACT_APP_API_BASE);
 
 const cx = classNames.bind(styles);
 
-ReplyComment.propTypes = {};
-
 function ReplyComment(props) {
-  const { comment, room, user, closeReplyComment, replyCommentUser } = props;
+  const { comment, room, userId, closeReplyComment, replyCommentUser } = props;
 
   const [textComment, setTextComment] = useState("");
 
@@ -66,7 +63,7 @@ function ReplyComment(props) {
           <button
             className={cx("btn", "btn-submit")}
             onClick={() =>
-              handleSubmitReplyComment(comment._id, user.userId, textComment)
+              handleSubmitReplyComment(comment._id, userId, textComment)
             }
           >
             Bình luận

@@ -2,7 +2,6 @@ import classNames from "classnames/bind";
 import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { NavLink, useLocation, useParams, Link } from "react-router-dom";
-import { useSelector } from "react-redux";
 
 import styles from "./style.module.scss";
 import * as lessonService from "../../services/lessonService";
@@ -11,6 +10,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleCheck, faLessThan } from "@fortawesome/free-solid-svg-icons";
 import * as func from "../../ultils/func";
 import Comment from "../../components/Comment";
+import { useSelector } from "react-redux";
 
 const cx = classNames.bind(styles);
 
@@ -20,7 +20,8 @@ const Learn = () => {
   const [isLearned, setIsLearned] = useState(false);
   const [newLesson, setNewLesson] = useState(false);
 
-  const { user } = useSelector((state) => state.auth);
+  // eslint-disable-next-line no-unused-vars
+  const user = useSelector((state) => state.user);
 
   const location = useLocation();
   const params = useParams();
@@ -38,10 +39,10 @@ const Learn = () => {
     try {
       const fetchApi = async () => {
         const result = await lessonService.getById(lessonId);
-        if (result.status === "OK") {
+        if (result.status === 200) {
           setApiCalled(false);
           setNewLesson(false);
-          setLesson(result.data);
+          setLesson(result.data.data);
         }
       };
       fetchApi();
@@ -53,8 +54,8 @@ const Learn = () => {
     const { courseId } = params;
     const fetchCourse = async () => {
       try {
-        const result = await courseService.course(courseId); // Sử dụng courseService hoặc API endpoint tương tự
-        if (result.status === "OK") {
+        const result = await courseService.course(courseId);
+        if (result.status === 200) {
           setApiCalled(false);
           setCourse(result.data);
         }
@@ -143,7 +144,7 @@ const Learn = () => {
             dangerouslySetInnerHTML={{ __html: lesson.content }}
           ></div>
           <div className={cx("comment")}>
-            <Comment lessonId={lessonId} />
+            <Comment user={user} lessonId={lessonId} />
           </div>
         </div>
         <div className={cx("menu")}>

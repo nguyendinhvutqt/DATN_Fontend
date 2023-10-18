@@ -1,18 +1,28 @@
 import React from "react";
-import PropTypes from "prop-types";
 import classNames from "classnames/bind";
 import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faBook, faNewspaper } from "@fortawesome/free-solid-svg-icons";
-import { NavLink, useLocation } from "react-router-dom";
-
+import {
+  faBook,
+  faNewspaper,
+  faRightFromBracket,
+} from "@fortawesome/free-solid-svg-icons";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { useContext } from "react";
+import AuthContext from "../../../../context/AuthProvider";
 import avatar from "../../../../assets/images/avatar-default.png";
 
 const cx = classNames.bind(styles);
 
-Sidebar.propTypes = {};
+function Sidebar() {
+  const { setAuth } = useContext(AuthContext);
 
-function Sidebar(props) {
+  const navigate = useNavigate();
+
+  const handleSignOut = (e) => {
+    setAuth({});
+    navigate("/sign-in");
+  };
   const location = useLocation();
   return (
     <div className={cx("wrapper")}>
@@ -38,6 +48,10 @@ function Sidebar(props) {
         <FontAwesomeIcon icon={faNewspaper} />
         <span>Danh sách bài viết</span>
       </NavLink>
+      <div className={cx("block")} onClick={handleSignOut}>
+        <FontAwesomeIcon icon={faRightFromBracket} />
+        <span>Đăng xuất</span>
+      </div>
     </div>
   );
 }

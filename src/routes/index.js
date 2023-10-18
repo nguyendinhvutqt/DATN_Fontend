@@ -20,6 +20,14 @@ import CourseDetailsAdmin from "../pages/admin/CourseDetails";
 
 // public route
 const publicRoutes = [
+  { path: routesConfig.home, component: HomePage },
+
+  { path: "/sign-in", component: LoginPage, layout: null },
+  { path: "/sign-up", component: RegisterPage, layout: null },
+];
+
+// admin route
+const adminRoutes = [
   //admin
   { path: "/admin", component: HomePageAdmin, layout: AdminLayout },
   { path: "/admin/courses", component: CoursesPage, layout: AdminLayout },
@@ -29,9 +37,11 @@ const publicRoutes = [
     component: CourseDetailsAdmin,
     layout: AdminLayout,
   },
+];
 
+// user route
+const userRoutes = [
   //user
-  { path: routesConfig.home, component: HomePage },
   { path: "/blog", component: Blog },
   {
     path: "/learning/:courseId",
@@ -41,11 +51,6 @@ const publicRoutes = [
   { path: "/courses/:courseId", component: CourseDetailsUser },
   { path: "/products", component: ProductsPage },
   { path: "/profile", component: Profile, layout: HeaderOnly },
-  { path: "/sign-in", component: LoginPage, layout: null },
-  { path: "/sign-up", component: RegisterPage, layout: null },
 ];
 
-// private route
-const privateRoutes = [];
-
-export { publicRoutes, privateRoutes };
+export { publicRoutes, adminRoutes, userRoutes };

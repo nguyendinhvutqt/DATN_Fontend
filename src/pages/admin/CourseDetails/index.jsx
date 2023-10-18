@@ -163,6 +163,7 @@ const CourseDetails = () => {
 
   useEffect(() => {
     fetchApi();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   let numberChapter = 0;

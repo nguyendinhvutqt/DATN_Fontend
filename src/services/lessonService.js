@@ -1,4 +1,4 @@
-import axios from "../ultils/axios";
+import axios from "../api/axios";
 
 export const getById = async (id) => {
   try {

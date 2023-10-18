@@ -6,18 +6,13 @@ import classNames from "classnames/bind";
 
 import { Wrapper as PopperWrapper } from "../Popper";
 import styles from "./style.module.scss";
-import { useDispatch, useSelector } from "react-redux";
-import { logOut } from "../../redux/authSlice";
 import avatar from "../../assets/images/avatar-default.png";
 
 const cx = classNames.bind(styles);
 
-const Profile = ({ name }) => {
+const Profile = ({ user, dispatchLogout }) => {
   const [showMenu, setShowMenu] = useState(false);
 
-  const { user } = useSelector((state) => state.auth);
-
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleMenu = () => {
@@ -25,7 +20,7 @@ const Profile = ({ name }) => {
   };
 
   const handleSignOut = (e) => {
-    dispatch(logOut());
+    dispatchLogout();
     navigate("/sign-in");
   };
 
@@ -48,11 +43,19 @@ const Profile = ({ name }) => {
                   }
                   alt="img-avatar"
                 />
-                <p className={cx("title-name")}>{name}</p>
+                <p className={cx("title-name")}>{user.name}</p>
               </div>
               <Link to="/profile" className={cx("to-profile")}>
                 <p className={cx("text-link-profile")}>Trang cá nhân</p>
               </Link>
+              {user.roles.includes("admin") ? (
+                <Link to="/admin" className={cx("to-profile")}>
+                  <p className={cx("text-link-profile")}>Trang quản trị</p>
+                </Link>
+              ) : (
+                ""
+              )}
+
               <div className={cx("to-logout")} onClick={handleSignOut}>
                 <button className={cx("text-link-logout")}>Đăng xuất</button>
               </div>

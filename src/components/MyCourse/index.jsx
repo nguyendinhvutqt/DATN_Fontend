@@ -4,23 +4,21 @@ import { Wrapper as PopperWrapper } from "../Popper";
 import classNames from "classnames/bind";
 import styles from "./style.module.scss";
 import CourseItem from "../CourseItem";
-import { useSelector } from "react-redux";
 import * as userService from "../../services/userService";
 
 const cx = classNames.bind(styles);
 
-const MyCourse = () => {
+const MyCourse = ({ user }) => {
   const [listCourse, setListCourse] = useState([]);
   const [showCourse, setShowCourse] = useState(false);
-  const { user } = useSelector((state) => state.auth);
 
   useEffect(() => {
     try {
       const fetchApi = async () => {
         const result = await userService.getCourseByUserId(user.userId);
-        if (result.status === "OK") {
-          setListCourse(result.data);
-        }
+        // if (result.status === "OK") {
+        //   setListCourse(result.data);
+        // }
       };
       fetchApi();
     } catch (error) {

@@ -1,5 +1,4 @@
 import React from "react";
-import PropTypes from "prop-types";
 import styles from "./style.module.scss";
 import { useState } from "react";
 import classNames from "classnames/bind";
@@ -8,7 +7,6 @@ import { io } from "socket.io-client";
 import avatar from "../../assets/images/avatar-default.png";
 import { useEffect } from "react";
 import * as commentService from "../../services/commentService";
-import { useSelector } from "react-redux";
 import CommentUser from "../CommentUser";
 import ReplyComment from "../ReplyComment";
 import CommentUserReply from "../CommentUserReply";
@@ -17,21 +15,17 @@ const socket = io(process.env.REACT_APP_API_BASE);
 
 const cx = classNames.bind(styles);
 
-Comment.propTypes = {};
-
 function Comment(props) {
-  const { lessonId } = props;
-  const room = lessonId;
-  const { user } = useSelector((state) => state.auth);
+  const { lessonId, user } = props;
 
   // Messages States
   const [comment, setComment] = useState("");
-  const [comments, setComments] = useState("");
-  const [newComment, setNewComment] = useState("");
-  const [currentRoom, setCurrentRoom] = useState(room);
+  const [comments, setComments] = useState([]);
+  // const [newComment, setNewComment] = useState("");
+  // const [currentRoom, setCurrentRoom] = useState(lessonId);
+  const [prevRoom, setPrevRoom] = useState();
   const [isShowCommentReply, setIsShowCommentReply] = useState(false);
   const [replyCommentId, setReplyCommentId] = useState(null);
-  const [replyComments, setReplyComments] = useState({});
   const [replyCommentUser, setReplyCommentUser] = useState("");
 
   const inputRef = useRef();
@@ -42,25 +36,32 @@ function Comment(props) {
   };
 
   useEffect(() => {
-    console.log("room: ", room);
     // Khi component được mount, người dùng tham gia phòng bình luận của bài học
-    socket.emit("join-room", room);
+    socket.emit("join-room", lessonId);
 
     // Lắng nghe sự kiện khi có bình luận mới từ server
     socket.on("new-comment", (data) => {
-      setNewComment(data);
+      // setNewComment(data);
+      setComments(data);
     });
 
     // Lắng nghe sự kiện khi có Phản hồi bình luận bình luận từ server
     socket.on("new-reply-comment", async (data) => {
-      console.log("room1: ", data);
-      alert(room);
+      setComments((prev) => {
+        return prev.map((comment) => {
+          console.log(comment._id === data._id);
+          if (comment._id === data._id) {
+            return data;
+          }
+          return comment;
+        });
+      });
     });
-  }, [room, currentRoom]);
+  }, [lessonId]);
 
-  const handleNewReplyComment = (newComment) => {};
+  // const handleNewReplyComment = (newComment) => {};
 
-  const fetchApi = async () => {
+  const handleSubmit = async () => {
     try {
       const data = {
         userId: user.userId,
@@ -68,29 +69,23 @@ function Comment(props) {
       };
       const result = await commentService.addComment(lessonId, data);
       if (result.status === "OK") {
-        console.log("test-socket: ", result.data);
         setComment("");
-        setComments(result.data);
-        socket.emit("comment", { room, comments: result.data });
+        socket.emit("comment", { room: lessonId, comments: result.data });
       }
     } catch (error) {
       console.log("error: ", error);
     }
   };
 
-  const handleSubmit = () => {
-    fetchApi();
-  };
-
-  const getComment = async (lessonId, currentRoom) => {
+  const getComment = async (lessonId, prevRoom) => {
     try {
       const result = await commentService.getComments(lessonId);
-      console.log("check: ", result);
       if (result.status === "OK") {
-        socket.emit("leave-room", currentRoom);
-        setCurrentRoom(lessonId);
-        socket.emit("join-room", lessonId);
-        setNewComment("");
+        if (prevRoom) {
+          socket.emit("leave-room", prevRoom); // Rời phòng cũ
+        }
+        setPrevRoom(lessonId); // Lưu trữ giá trị của phòng trước đó
+        socket.emit("join-room", lessonId); // Tham gia phòng mới
         setComments(result.data);
       }
     } catch (error) {
@@ -99,12 +94,13 @@ function Comment(props) {
   };
 
   useEffect(() => {
-    getComment(lessonId);
-  }, [lessonId, currentRoom]);
-
-  const handleReplyToReplyComment = (replyCommentId, replyCommentUser) => {};
+    getComment(lessonId, prevRoom);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lessonId]);
 
   const handleReplyComment = (replyCommentId, replyCommentUser) => {
+    console.log("replyCommentId: ", replyCommentId);
+    console.log("replyCommentUser: ", replyCommentUser);
     setReplyCommentId(replyCommentId);
     setReplyCommentUser(replyCommentUser);
   };
@@ -116,8 +112,6 @@ function Comment(props) {
   const handleCloseReplyComment = () => {
     setIsShowCommentReply(false);
   };
-
-  let uiComment = newComment.length > 0 ? newComment : comments;
 
   return (
     <div className={cx("wrapper")}>
@@ -142,36 +136,36 @@ function Comment(props) {
         </button>
       </div>
       <div className={cx("wrapper-comment")}>
-        {uiComment &&
-          uiComment.map((comment) => (
-            <div key={comment._id} className={cx("box-comment")}>
+        {comments &&
+          comments.map((commentData) => (
+            <div key={commentData._id} className={cx("box-comment")}>
               <CommentUser
-                comment={comment}
-                user={user}
+                comment={commentData}
+                userId={user.userId}
                 onReplyComment={handleReplyComment}
                 showReplyComment={handleShowReplyComment}
               />
 
               <div className={cx("reply-comment")}>
-                {comment?.replies &&
-                  comment.replies.map((reply) => (
+                {commentData?.replies &&
+                  commentData.replies.map((reply) => (
                     <CommentUserReply
-                      commentId={comment._id}
+                      commentId={commentData._id}
                       comment={reply}
-                      user={user}
-                      room={room}
+                      userId={user.userId}
+                      room={lessonId}
                       onReplyComment={handleReplyComment}
                       showReplyComment={handleShowReplyComment}
                     />
                   ))}
               </div>
-              {replyCommentId === comment._id && isShowCommentReply && (
+              {replyCommentId === commentData._id && isShowCommentReply && (
                 <ReplyComment
-                  comment={comment}
+                  comment={commentData}
                   replyCommentUser={replyCommentUser}
-                  room={room}
-                  user={user}
-                  onNewReplyComment={handleNewReplyComment}
+                  room={lessonId}
+                  userId={user.userId}
+                  // onNewReplyComment={handleNewReplyComment}
                   closeReplyComment={handleCloseReplyComment}
                 />
               )}

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import classNames from "classnames/bind";
 import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -8,10 +7,8 @@ import * as commentService from "../../services/commentService";
 
 const cx = classNames.bind(styles);
 
-CommentUser.propTypes = {};
-
 function CommentUser(props) {
-  const { comment, user, onReplyComment, showReplyComment } = props;
+  const { comment, userId, onReplyComment, showReplyComment } = props;
 
   const [like, setLike] = useState(0);
 
@@ -42,29 +39,29 @@ function CommentUser(props) {
     <div className={cx("comment")}>
       <img
         className={cx("avatar")}
-        src={process.env.REACT_APP_API_BASE + comment.user.avatar}
+        src={process.env.REACT_APP_API_BASE + comment?.user?.avatar}
         alt="avatar"
       />
       <div
         className={cx("content-comment", {
-          active: comment.user._id === user.userId,
+          active: comment.user?._id === userId,
         })}
       >
         <div>
-          <strong>{comment.user.name}</strong>
+          <strong>{comment.user?.name}</strong>
           <p className={cx("text-comment")}>{comment?.comment}</p>
         </div>
         <div className={cx("action")}>
           <p
             className={cx("like")}
-            onClick={() => handleLikeComment(comment._id, user.userId)}
+            onClick={() => handleLikeComment(comment?._id, userId)}
           >
             Thích
           </p>
           <p
             className={cx("reply")}
             onClick={() => {
-              onReplyComment(comment._id, comment.user.name);
+              onReplyComment(comment?._id, comment.user.name);
               showReplyComment();
             }}
           >

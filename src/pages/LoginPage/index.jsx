@@ -1,45 +1,46 @@
 import React, { useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./style.module.scss";
-import PropTypes from "prop-types";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useDispatch } from "react-redux";
 import {
   faEye,
   faEyeSlash,
   faUser,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
-import { useDispatch } from "react-redux";
 
-import { loginSuccess } from "../../redux/authSlice";
 import * as userService from "../../services/userService";
 import logo from "../../assets/images/l.png";
+import { login } from "../../store/reducers/userSlice";
+
 const cx = classNames.bind(styles);
 
-LoginPage.propTypes = {
-  onSubmit: PropTypes.func,
-};
+function LoginPage() {
+  const dispatch = useDispatch();
 
-function LoginPage(props) {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
 
-  const dispatch = useDispatch();
-
-  const navigate = useNavigate();
-
   const handleSubmit = (e) => {
     const fetchApi = async () => {
       try {
         const result = await userService.login(username, password);
-        if (result?.status === "OK") {
+        console.log(result);
+        if (result.status === 200) {
           setError("");
-          dispatch(loginSuccess({ ...result.data }));
-          localStorage.setItem("userInfo", JSON.stringify(result.data.user));
-          navigate("/");
+          dispatch(login(result.data.data));
+          localStorage.setItem("access-token", result.data.data.accessToken);
+          localStorage.setItem("refresh-token", result.data.data.refreshToken);
+
+          navigate(from, { replace: true });
         } else {
           setError(result.message);
         }
