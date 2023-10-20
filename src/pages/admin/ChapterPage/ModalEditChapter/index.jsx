@@ -6,8 +6,6 @@ import classNames from "classnames/bind";
 import styles from "./style.module.scss";
 import * as chapterService from "../../../../services/chapterService";
 import { toast } from "react-toastify";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { useEffect } from "react";
 
 const cx = classNames.bind(styles);
@@ -18,20 +16,13 @@ ModalEditChapter.propTypes = {
 };
 
 function ModalEditChapter(props) {
-  const {
-    isOpen,
-    onRequestClose,
-    chapter,
-    onChapterEdited,
-    onError,
-    onShowError,
-  } = props;
+  const { isOpen, onRequestClose, chapter, onChapterEdited, onShowError } =
+    props;
 
   const [titleChapter, setTitleChapter] = useState("a");
   const [chapterId, setChapterId] = useState(null);
-  const [error, setError] = useState("");
   const [laoding, setLoading] = useState(false);
-  console.log("titleChapter: ", titleChapter);
+
   const customStyles = {
     content: {
       width: "700px",
@@ -60,14 +51,12 @@ function ModalEditChapter(props) {
         const result = await chapterService.editChapter(chapterId, {
           title: titleChapter,
         });
-        if (result.status === "OK") {
+        if (result.status === 200) {
           setTitleChapter("");
-          toast.success("Sửa chương thành công!");
-          onChapterEdited(result.data);
+          toast.success(result.data.message);
+          onChapterEdited(result.data.data);
           setLoading(false);
         } else {
-          setError(result.message);
-          onShowError();
           setLoading(false);
         }
       };
@@ -86,16 +75,6 @@ function ModalEditChapter(props) {
       contentLabel="Example Modal"
     >
       <h2>Sửa chương</h2>
-      {onError && error && (
-        <div className={cx("error")}>
-          <strong>{error}</strong>
-          <FontAwesomeIcon
-            className={cx("icon-close")}
-            icon={faXmark}
-            onClick={() => setError("")}
-          />
-        </div>
-      )}
       <div className={cx("add-course")}>
         <div className={cx("form-control")}>
           <p className={cx("title")}>Tiêu đề:</p>

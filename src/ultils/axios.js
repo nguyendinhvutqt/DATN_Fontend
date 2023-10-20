@@ -3,17 +3,29 @@ import axios from "axios";
 // Set config defaults when creating the instance
 const instance = axios.create({
   baseURL: process.env.REACT_APP_API_KEY,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  // headers: {
+  //   "Content-Type": "application/json",
+  // },
 });
 
 export const axiosPublic = axios.create({
   baseURL: process.env.REACT_APP_API_KEY,
-  headers: {
-    "Content-Type": "application/json",
-  },
+  //
 });
+
+// Add a response interceptor
+axiosPublic.interceptors.response.use(
+  function (response) {
+    // Any status code that lie within the range of 2xx cause this function to trigger
+    // Do something with response data
+    return response;
+  },
+  function (error) {
+    // Any status codes that falls outside the range of 2xx cause this function to trigger
+    // Do something with response error
+    return Promise.reject(error.response);
+  }
+);
 
 // Thêm interceptor để thêm access token vào các request
 instance.interceptors.request.use(
@@ -33,7 +45,7 @@ instance.interceptors.response.use(
     // Xử lý một response thành công
     return response;
   },
-  (error) => {
+  async (error) => {
     if (error.response && error.response.status === 401) {
       // Nếu token hết hạn hoặc bất kỳ mã lỗi nào khác bạn muốn xử lý
       // Gọi refresh token ở đây và trả về một promise
@@ -57,7 +69,7 @@ instance.interceptors.response.use(
         });
     }
     // Nếu không phải lỗi 401, trả về error ban đầu
-    return Promise.reject(error);
+    return Promise.reject(error.response);
   }
 );
 

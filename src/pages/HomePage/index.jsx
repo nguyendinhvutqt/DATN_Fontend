@@ -20,7 +20,6 @@ export const HomePage = () => {
     const fetchApi = async () => {
       try {
         const result = await courseService.courses();
-        console.log("result: ", result);
         if (result.status === 200) {
           setCourses(result.data);
         }

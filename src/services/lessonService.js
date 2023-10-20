@@ -1,8 +1,8 @@
-import axios from "../api/axios";
+import axios from "../ultils/axios";
 
-export const getById = async (id) => {
+export const getById = async (lessonId) => {
   try {
-    const res = await axios.get(`lessons/${id}`);
+    const res = await axios.get(`lessons/${lessonId}`);
     return res;
   } catch (error) {
     return error;
@@ -11,7 +11,7 @@ export const getById = async (id) => {
 
 export const addLesson = async (chapterId, data) => {
   try {
-    const res = await axios.post(`chapters/${chapterId}/lesson`, data);
+    const res = await axios.post(`lessons/${chapterId}/lesson`, data);
     return res;
   } catch (error) {
     return error;

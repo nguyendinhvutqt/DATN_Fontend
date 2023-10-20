@@ -2,7 +2,7 @@ import axios from "../ultils/axios";
 
 export const addChapter = async (courseId, data) => {
   try {
-    const respone = await axios.post(`courses/${courseId}/chapter`, data);
+    const respone = await axios.post(`chapters/${courseId}/chapter`, data);
     return respone;
   } catch (error) {
     return error;

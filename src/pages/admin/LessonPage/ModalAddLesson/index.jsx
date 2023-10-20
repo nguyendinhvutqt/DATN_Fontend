@@ -7,8 +7,6 @@ import classNames from "classnames/bind";
 import styles from "./style.module.scss";
 import * as lessonService from "../../../../services/lessonService";
 import { toast } from "react-toastify";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import ReactPlayer from "react-player";
 
 const cx = classNames.bind(styles);
@@ -19,18 +17,10 @@ ModalAddLesson.propTypes = {
 };
 
 function ModalAddLesson(props) {
-  const {
-    isOpen,
-    onRequestClose,
-    chapterId,
-    onLessonAdded,
-    showError,
-    onShowError,
-  } = props;
+  const { isOpen, onRequestClose, chapterId, onLessonAdded } = props;
   const [titleLesson, setTitleLesson] = useState("");
   const [video, setVideo] = useState("");
   const [descriptionLseson, setDescriptionLseson] = useState("");
-  const [error, setError] = useState("");
 
   const customStyles = {
     content: {
@@ -54,15 +44,12 @@ function ModalAddLesson(props) {
           resources: video,
         };
         const result = await lessonService.addLesson(chapterId, data);
-        if (result.status === "OK") {
+        if (result.status === 201) {
           setDescriptionLseson("");
           setVideo("");
           setTitleLesson("");
-          toast.success("Thêm bài học thành công!");
-          onLessonAdded(chapterId, result.data);
-        } else {
-          setError(result.message);
-          onShowError();
+          toast.success(result.data.message);
+          onLessonAdded(chapterId, result.data.data);
         }
       };
       fetchApi();
@@ -80,16 +67,6 @@ function ModalAddLesson(props) {
       contentLabel="Example Modal"
     >
       <h2>Thêm mới bài học</h2>
-      {showError && error && (
-        <div className={cx("error")}>
-          <strong>{error}</strong>
-          <FontAwesomeIcon
-            className={cx("icon-close")}
-            icon={faXmark}
-            onClick={() => setError("")}
-          />
-        </div>
-      )}
       <div className={cx("add-course")}>
         <div className={cx("form-control")}>
           <p className={cx("title")}>Tiêu đề:</p>

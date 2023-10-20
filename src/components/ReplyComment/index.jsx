@@ -10,7 +10,7 @@ const socket = io(process.env.REACT_APP_API_BASE);
 const cx = classNames.bind(styles);
 
 function ReplyComment(props) {
-  const { comment, room, userId, closeReplyComment, replyCommentUser } = props;
+  const { comment, room, closeReplyComment, replyCommentUser } = props;
 
   const [textComment, setTextComment] = useState("");
 
@@ -20,20 +20,20 @@ function ReplyComment(props) {
     }
   }, [replyCommentUser]);
 
-  const handleSubmitReplyComment = async (commentId, userId, textComment) => {
+  const handleSubmitReplyComment = async (commentId, textComment) => {
     try {
       const data = {
-        userId,
         replyComment: textComment,
       };
       // Gửi phản hồi bình luận lên server
       const result = await commentService.replyComment(commentId, data);
 
       setTextComment("");
-      if (result.status === "OK") {
+      if (result.status === 200) {
+        closeReplyComment();
         socket.emit("reply-comment", {
           room,
-          replyComment: result.data,
+          replyComment: result.data.data,
         });
       }
     } catch (error) {
@@ -62,9 +62,7 @@ function ReplyComment(props) {
           </button>
           <button
             className={cx("btn", "btn-submit")}
-            onClick={() =>
-              handleSubmitReplyComment(comment._id, userId, textComment)
-            }
+            onClick={() => handleSubmitReplyComment(comment._id, textComment)}
           >
             Bình luận
           </button>

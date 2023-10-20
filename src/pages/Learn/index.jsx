@@ -39,6 +39,7 @@ const Learn = () => {
     try {
       const fetchApi = async () => {
         const result = await lessonService.getById(lessonId);
+        console.log(result);
         if (result.status === 200) {
           setApiCalled(false);
           setNewLesson(false);

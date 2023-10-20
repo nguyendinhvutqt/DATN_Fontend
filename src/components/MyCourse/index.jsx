@@ -15,10 +15,10 @@ const MyCourse = ({ user }) => {
   useEffect(() => {
     try {
       const fetchApi = async () => {
-        const result = await userService.getCourseByUserId(user.userId);
-        // if (result.status === "OK") {
-        //   setListCourse(result.data);
-        // }
+        const result = await userService.getCourseLearned();
+        if (result.status === 200) {
+          setListCourse(result.data.courses);
+        }
       };
       fetchApi();
     } catch (error) {

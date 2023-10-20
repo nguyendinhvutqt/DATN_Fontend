@@ -32,11 +32,8 @@ function CourseDetails() {
 
   const handleRegisterCourse = async () => {
     if (courseData) {
-      const result = await courseService.registerCourse(
-        courseData._id,
-        user.userId
-      );
-      if (result.status === "OK") {
+      const result = await courseService.registerCourse(courseData._id);
+      if (result.status === 200) {
         navigate(
           `/learning/${courseData._id}?id=${courseData?.chapters[0]?.lessons[0]._id}`
         );

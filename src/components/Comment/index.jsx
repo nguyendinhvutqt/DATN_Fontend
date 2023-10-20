@@ -21,8 +21,6 @@ function Comment(props) {
   // Messages States
   const [comment, setComment] = useState("");
   const [comments, setComments] = useState([]);
-  // const [newComment, setNewComment] = useState("");
-  // const [currentRoom, setCurrentRoom] = useState(lessonId);
   const [prevRoom, setPrevRoom] = useState();
   const [isShowCommentReply, setIsShowCommentReply] = useState(false);
   const [replyCommentId, setReplyCommentId] = useState(null);
@@ -64,13 +62,12 @@ function Comment(props) {
   const handleSubmit = async () => {
     try {
       const data = {
-        userId: user.userId,
         comment: comment,
       };
       const result = await commentService.addComment(lessonId, data);
-      if (result.status === "OK") {
+      if (result.status === 201) {
         setComment("");
-        socket.emit("comment", { room: lessonId, comments: result.data });
+        socket.emit("comment", { room: lessonId, comments: result.data.data });
       }
     } catch (error) {
       console.log("error: ", error);
@@ -80,13 +77,13 @@ function Comment(props) {
   const getComment = async (lessonId, prevRoom) => {
     try {
       const result = await commentService.getComments(lessonId);
-      if (result.status === "OK") {
+      if (result.status === 200) {
         if (prevRoom) {
           socket.emit("leave-room", prevRoom); // Rời phòng cũ
         }
         setPrevRoom(lessonId); // Lưu trữ giá trị của phòng trước đó
         socket.emit("join-room", lessonId); // Tham gia phòng mới
-        setComments(result.data);
+        setComments(result.data.data);
       }
     } catch (error) {
       console.log(error);
@@ -165,7 +162,6 @@ function Comment(props) {
                   replyCommentUser={replyCommentUser}
                   room={lessonId}
                   userId={user.userId}
-                  // onNewReplyComment={handleNewReplyComment}
                   closeReplyComment={handleCloseReplyComment}
                 />
               )}

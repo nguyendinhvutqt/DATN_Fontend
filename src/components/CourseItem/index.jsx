@@ -3,19 +3,16 @@ import PropTypes from "prop-types";
 import classNames from "classnames/bind";
 import styles from "./style.module.scss";
 import { Link } from "react-router-dom";
-// import { useSelector } from "react-redux";
-import { useContext } from "react";
-import AuthContext from "../../context/AuthProvider";
+import { useSelector } from "react-redux";
 
 const cx = classNames.bind(styles);
 
 const CourseItem = ({ data }) => {
-  // const { user } = useSelector((state) => state.auth);const { auth } = useContext(AuthContext);
-  const { auth } = useContext(AuthContext);
+  const user = useSelector((state) => state.user);
   return (
     <Link
       to={
-        data.students.includes(auth?.userId)
+        data.students.includes(user.userId)
           ? `/learning/${data._id}?id=${data?.chapters[0]?.lessons[0]._id}`
           : `/courses/${data._id}`
       }

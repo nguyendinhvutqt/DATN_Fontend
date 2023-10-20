@@ -3,7 +3,12 @@ import classNames from "classnames/bind";
 import styles from "./style.module.scss";
 import { Link, useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash, faUser } from "@fortawesome/free-solid-svg-icons";
+import {
+  faEye,
+  faEyeSlash,
+  faUser,
+  faXmark,
+} from "@fortawesome/free-solid-svg-icons";
 import logo from "../../assets/images/l.png";
 import * as userService from "../../services/userService";
 
@@ -16,6 +21,7 @@ export const RegisterPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showCfPassword, setShowCfPassword] = useState(false);
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
@@ -28,13 +34,14 @@ export const RegisterPage = () => {
         confirmPassword,
       };
       const result = await userService.register(data);
-      console.log(result);
-      if (result.status === "OK") {
+      if (result.status === 201) {
         setName("");
         setUsername("");
         setPassword("");
         setConfirmPassword("");
         navigate("/sign-in");
+      } else if (result.status === 400) {
+        setError(result.data.message);
       }
     } catch (error) {
       console.log(error);
@@ -43,6 +50,10 @@ export const RegisterPage = () => {
 
   const handleRegister = () => {
     register();
+  };
+
+  const handleHideError = () => {
+    setError("");
   };
 
   return (
@@ -56,6 +67,16 @@ export const RegisterPage = () => {
           <div className={cx("account")}>
             <h2>ĐĂNG KÍ TÀI KHOẢN</h2>
           </div>
+          {error && (
+            <div className={cx("error")}>
+              <strong>{error}</strong>
+              <FontAwesomeIcon
+                className={cx("cancel")}
+                icon={faXmark}
+                onClick={handleHideError}
+              />
+            </div>
+          )}
           <div className={cx("input")}>
             <FontAwesomeIcon className={cx("icon")} icon={faUser} />
             <input

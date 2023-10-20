@@ -9,6 +9,8 @@ const cx = classNames.bind(styles);
 function CommentUserReply(props) {
   const { comment, commentId, userId, onReplyComment, showReplyComment } =
     props;
+
+  console.log(comment);
   const [like, setLike] = useState(0);
 
   useEffect(() => {
@@ -23,7 +25,7 @@ function CommentUserReply(props) {
         userId,
       };
       const result = await commentService.likeComment(commentId, data);
-      if (result.status === "OK") {
+      if (result.status === 200) {
         setLike(result.data.likes.length);
       }
     } catch (error) {

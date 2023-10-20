@@ -63,7 +63,7 @@ function ModalEditCourse(props) {
     try {
       const fetchApi = async () => {
         const result = await courseService.editCourse(courseEdit._id, formData);
-        if (result.status === "OK") {
+        if (result.status === 200) {
           setDescriptionCourse("");
           setThumbnail("");
           setTitleCourse("");

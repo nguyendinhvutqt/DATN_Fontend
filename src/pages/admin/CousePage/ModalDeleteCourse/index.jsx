@@ -31,7 +31,7 @@ function ModalDeleteCourse(props) {
     try {
       const fetchApi = async () => {
         const result = await courseService.delCourse(courseIdToDelete);
-        if (result.status === "OK") {
+        if (result.status === 200) {
           toast.success("Xoá khoá học thành công!");
           onRequestClose();
           if (onCourseDeleted) {

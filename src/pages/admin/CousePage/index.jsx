@@ -40,9 +40,10 @@ const CoursesPage = () => {
   const fetchApi = async (currentPage) => {
     try {
       const result = await courseService.coursesAndPaginate(currentPage);
-      if (result.status === "OK") {
-        setCourses(result.data);
-        setTotalPage(result.totalPage);
+
+      if (result.status === 200) {
+        setCourses(result.data.data);
+        setTotalPage(result.data.totalPage);
       }
     } catch (error) {
       console.log(error);

@@ -32,9 +32,8 @@ function ModalDeleteLesson(props) {
     try {
       const fetchApi = async () => {
         const result = await lessonService.deleteLesson(lessonId);
-        console.log(result);
-        if (result.status === "OK") {
-          toast.success("Xoá bài học thành công!");
+        if (result.status === 200) {
+          toast.success(result.data.message);
           onLessonDeleted(lessonId);
         }
       };

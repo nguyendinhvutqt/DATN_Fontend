@@ -44,10 +44,10 @@ const CourseDetails = () => {
     setIsShowAddChapter(false);
   };
 
+  // thêm mới chương
   const handleChapterAdded = (newChapter) => {
     const updatedChapters = [...chapters, newChapter];
     setChapters(updatedChapters);
-    setShowError(false);
     setIsShowAddChapter(false);
   };
 
@@ -275,8 +275,6 @@ const CourseDetails = () => {
         <ModalAddChapter
           isOpen={isShowAddChapter}
           courseId={courseId}
-          onError={showError}
-          onShowError={handleShowError}
           onRequestClose={hanleRequestAddChapterClose}
           onChapterAdded={handleChapterAdded}
         />
@@ -296,8 +294,6 @@ const CourseDetails = () => {
         <ModalAddLesson
           isOpen={isShowAddLesson}
           chapterId={chapterId}
-          onError={showError}
-          onShowError={handleShowError}
           onRequestClose={hanleRequestAddLessonClose}
           onLessonAdded={handleLessonAdded}
         />
@@ -310,8 +306,6 @@ const CourseDetails = () => {
         <ModalEditLesson
           isOpen={isShowEditLesson}
           lessonEdit={lessonEdit}
-          onError={showError}
-          onShowError={handleShowError}
           onRequestClose={hanleRequestEditLessonClose}
           onLessonEdited={handleLessonEdited}
         />

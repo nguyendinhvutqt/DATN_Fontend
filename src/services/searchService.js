@@ -5,6 +5,6 @@ export const search = async (q, type = "less") => {
     const res = await axios(`search?q=${q}&type=${type}`);
     return res;
   } catch (error) {
-    console.log(error);
+    return error;
   }
 };

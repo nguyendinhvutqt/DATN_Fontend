@@ -36,13 +36,13 @@ function LoginPage() {
         console.log(result);
         if (result.status === 200) {
           setError("");
-          dispatch(login(result.data.data));
-          localStorage.setItem("access-token", result.data.data.accessToken);
-          localStorage.setItem("refresh-token", result.data.data.refreshToken);
+          dispatch(login(result.data));
+          localStorage.setItem("access-token", result.data.accessToken);
+          localStorage.setItem("refresh-token", result.data.refreshToken);
 
           navigate(from, { replace: true });
-        } else {
-          setError(result.message);
+        } else if (result.status === 400) {
+          setError(result.data.message);
         }
       } catch (error) {
         console.log("error", error);

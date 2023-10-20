@@ -13,27 +13,25 @@ function CommentUser(props) {
   const [like, setLike] = useState(0);
 
   useEffect(() => {
-    // if (comment.likes.length > 0) {
-    //   setLike(comment.likes.length);
-    // }
+    if (comment.likes.length > 0) {
+      setLike(comment.likes.length);
+    }
   }, [comment.likes]);
 
-  const likeCommentApi = async (commentId, userId) => {
+  const likeCommentApi = async (commentId) => {
     try {
-      const data = {
-        userId,
-      };
-      const result = await commentService.likeComment(commentId, data);
-      if (result.status === "OK") {
-        setLike(result.data.likes.length);
+      const result = await commentService.likeComment(commentId);
+      console.log(result);
+      if (result.status === 200) {
+        setLike(result.data.data.likes.length);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleLikeComment = (commentId, userId) => {
-    likeCommentApi(commentId, userId);
+  const handleLikeComment = (commentId) => {
+    likeCommentApi(commentId);
   };
   return (
     <div className={cx("comment")}>
@@ -54,7 +52,7 @@ function CommentUser(props) {
         <div className={cx("action")}>
           <p
             className={cx("like")}
-            onClick={() => handleLikeComment(comment?._id, userId)}
+            onClick={() => handleLikeComment(comment?._id)}
           >
             Thích
           </p>

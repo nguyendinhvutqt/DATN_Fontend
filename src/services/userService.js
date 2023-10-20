@@ -11,16 +11,16 @@ export const login = async (username, password) => {
 
 export const register = async (data) => {
   try {
-    const res = await axios.post("users/sign-up", data);
+    const res = await axiosPublic.post("users/sign-up", data);
     return res;
   } catch (error) {
     return error;
   }
 };
 
-export const getCourseByUserId = async (userId) => {
+export const getCourseLearned = async () => {
   try {
-    const res = await axios.get(`users/course/${userId}`);
+    const res = await axios.get(`users/course/learned`);
     return res;
   } catch (error) {
     return error;

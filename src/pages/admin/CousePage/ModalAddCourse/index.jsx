@@ -6,9 +6,10 @@ import "react-quill/dist/quill.snow.css";
 import classNames from "classnames/bind";
 import styles from "./style.module.scss";
 import * as courseService from "../../../../services/courseService";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import "react-toastify/dist/ReactToastify.css";
 
 const cx = classNames.bind(styles);
 
@@ -47,7 +48,8 @@ function ModalAddCourse(props) {
     try {
       const fetchApi = async () => {
         const result = await courseService.addCourse(formData);
-        if (result.status === "OK") {
+        console.log(result);
+        if (result.status === 201) {
           setDescriptionCourse("");
           setThumbnailCourse("");
           setTitleCourse("");
@@ -56,9 +58,9 @@ function ModalAddCourse(props) {
           if (props.onCourseAdded) {
             props.onCourseAdded();
           }
-        } else {
-          setError(result.message);
-          onShowError();
+        } else if (result.status === 400) {
+          toast.error(result.data.message);
+          // onShowError();
         }
       };
       fetchApi();

@@ -18,9 +18,9 @@ export const getComments = async (lessonId) => {
   }
 };
 
-export const likeComment = async (commentId, data) => {
+export const likeComment = async (commentId) => {
   try {
-    const response = await axios.put(`comments/${commentId}/like`, data);
+    const response = await axios.put(`comments/${commentId}/like`);
     return response;
   } catch (error) {
     return error;

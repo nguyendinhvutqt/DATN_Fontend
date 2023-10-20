@@ -32,9 +32,9 @@ const Search = () => {
     }
     const fetchApi = async () => {
       const result = await searchService.search(debounced);
-      if (result.status === "OK") {
-        setCourses(result.data?.courses);
-        setBlogs(result.data?.blogs);
+      if (result.status === 200) {
+        setCourses(result?.data?.data?.courses);
+        setBlogs(result.data?.data?.blogs);
       }
     };
     fetchApi();

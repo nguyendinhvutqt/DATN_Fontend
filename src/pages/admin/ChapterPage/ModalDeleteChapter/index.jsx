@@ -35,8 +35,8 @@ function ModalDeleteChapter(props) {
       setLoading(true);
       const fetchApi = async () => {
         const result = await chapterService.delChapter(chapterId);
-        if (result.status === "OK") {
-          toast.success("Xoá chương học thành công!");
+        if (result.status === 200) {
+          toast.success(result.data.message);
 
           onChapterDeleted(chapterId);
           setLoading(false);
