@@ -48,7 +48,6 @@ function ModalAddCourse(props) {
     try {
       const fetchApi = async () => {
         const result = await courseService.addCourse(formData);
-        console.log(result);
         if (result.status === 201) {
           setDescriptionCourse("");
           setThumbnailCourse("");

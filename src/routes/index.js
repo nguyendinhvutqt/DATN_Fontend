@@ -17,6 +17,7 @@ import AdminLayout from "../layouts/admin/AdminLayout";
 import CoursesPage from "../pages/admin/CousePage";
 import BlogsPage from "../pages/admin/BlogsPage";
 import CourseDetailsAdmin from "../pages/admin/CourseDetails";
+import Post from "../components/Post";
 
 // public route
 const publicRoutes = [
@@ -43,6 +44,7 @@ const adminRoutes = [
 const userRoutes = [
   //user
   { path: "/blog", component: Blog },
+  { path: "/add-blog", component: Post },
   {
     path: "/learning/:courseId",
     component: Learn,

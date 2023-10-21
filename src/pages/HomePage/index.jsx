@@ -8,6 +8,7 @@ import * as courseService from "../../services/courseService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
+import { toast, ToastContainer } from "react-toastify";
 
 const cx = classNames.bind(styles);
 
@@ -49,9 +50,9 @@ export const HomePage = () => {
       <div className={cx("wrapper-content")}>
         <div className={cx("wrapper-title")}>
           <h2 className={cx("title-content")}>DANH SÁCH KHOÁ HỌC</h2>
-          <Link className={cx("link")} to="/course">
+          {/* <Link className={cx("link")} to="/course">
             {`Xem tất cả ${">>"}`}
-          </Link>
+          </Link> */}
         </div>
 
         <div className={cx("list-course")}>
@@ -90,12 +91,12 @@ export const HomePage = () => {
       <div className={cx("wrapper-content")}>
         <div className={cx("wrapper-title")}>
           <h2 className={cx("title-content")}>BÀI VIẾT</h2>
-          <Link className={cx("link")} to="/Blog">
+          {/* <Link className={cx("link")} to="/Blog">
             Xem tất cả ${">>"}
-          </Link>
+          </Link> */}
         </div>
         <div className={cx("list-blog")}>
-          {/* {courses.map((item) => (
+          {courses.map((item) => (
             <div key={item._id} className={cx("blog")}>
               <Link to={`/blog`} className={cx("link-blog")} key={item.id}>
                 <img
@@ -111,9 +112,10 @@ export const HomePage = () => {
                 </div>
               </Link>
             </div>
-          ))} */}
+          ))}
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 };

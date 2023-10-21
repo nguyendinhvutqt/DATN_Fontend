@@ -33,7 +33,7 @@ export const Sidebar = () => {
           <div className={cx("show-add-blog")} tabIndex="-1" {...attrs}>
             <PopperWrapper>
               <div className={cx("wrapper-add-blog")}>
-                <Link className={cx("add-blog")} to="add-blog">
+                <Link className={cx("add-blog")} to="/add-blog">
                   <FontAwesomeIcon icon={faPen} />{" "}
                   <span className={cx("text-blog")}>Viết blog</span>
                 </Link>

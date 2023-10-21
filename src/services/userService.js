@@ -1,5 +1,14 @@
 import axios, { axiosPublic } from "../ultils/axios";
 
+export const getUsers = async () => {
+  try {
+    const res = await axios.get("users");
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const login = async (username, password) => {
   try {
     const res = await axiosPublic.post("users/sign-in", { username, password });
