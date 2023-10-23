@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import HeadlessTippy from "@tippyjs/react/headless";
 import "tippy.js/dist/tippy.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import classNames from "classnames/bind";
 
 import { Wrapper as PopperWrapper } from "../Popper";
@@ -12,6 +12,8 @@ const cx = classNames.bind(styles);
 
 const Profile = ({ user, dispatchLogout }) => {
   const [showMenu, setShowMenu] = useState(false);
+
+  const location = useLocation();
 
   const navigate = useNavigate();
 
@@ -48,13 +50,16 @@ const Profile = ({ user, dispatchLogout }) => {
               <Link to="/profile" className={cx("to-profile")}>
                 <p className={cx("text-link-profile")}>Trang cá nhân</p>
               </Link>
-              {user.roles.includes("admin") ? (
-                <Link to="/admin" className={cx("to-profile")}>
-                  <p className={cx("text-link-profile")}>Trang quản trị</p>
-                </Link>
-              ) : (
-                ""
-              )}
+              {user.roles.includes("admin") &&
+                (location.pathname.startsWith("/admin") ? (
+                  <Link to="/" className={cx("to-profile")}>
+                    <p className={cx("text-link-profile")}>Trang người dùng</p>
+                  </Link>
+                ) : (
+                  <Link to="/admin" className={cx("to-profile")}>
+                    <p className={cx("text-link-profile")}>Trang quản trị</p>
+                  </Link>
+                ))}
 
               <div className={cx("to-logout")} onClick={handleSignOut}>
                 <button className={cx("text-link-logout")}>Đăng xuất</button>

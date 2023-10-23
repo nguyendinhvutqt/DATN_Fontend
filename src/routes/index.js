@@ -18,6 +18,8 @@ import CoursesPage from "../pages/admin/CousePage";
 import BlogsPage from "../pages/admin/BlogsPage";
 import CourseDetailsAdmin from "../pages/admin/CourseDetails";
 import Post from "../components/Post";
+import UserAdminPage from "../pages/admin/UserPage";
+import BlogDetailAdmin from "../pages/admin/BlogDetails";
 
 // public route
 const publicRoutes = [
@@ -32,12 +34,18 @@ const adminRoutes = [
   //admin
   { path: "/admin", component: HomePageAdmin, layout: AdminLayout },
   { path: "/admin/courses", component: CoursesPage, layout: AdminLayout },
-  { path: "/admin/blogs", component: BlogsPage, layout: AdminLayout },
   {
     path: "/admin/courses/:courseId",
     component: CourseDetailsAdmin,
     layout: AdminLayout,
   },
+  { path: "/admin/blogs", component: BlogsPage, layout: AdminLayout },
+  {
+    path: "/admin/blogs/:blogId",
+    component: BlogDetailAdmin,
+    layout: AdminLayout,
+  },
+  { path: "/admin/users", component: UserAdminPage, layout: AdminLayout },
 ];
 
 // user route

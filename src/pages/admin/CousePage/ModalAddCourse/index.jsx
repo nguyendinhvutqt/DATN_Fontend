@@ -6,9 +6,7 @@ import "react-quill/dist/quill.snow.css";
 import classNames from "classnames/bind";
 import styles from "./style.module.scss";
 import * as courseService from "../../../../services/courseService";
-import { toast, ToastContainer } from "react-toastify";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const cx = classNames.bind(styles);
@@ -19,12 +17,11 @@ ModalAddCourse.propTypes = {
 };
 
 function ModalAddCourse(props) {
-  const { isOpen, onRequestClose, showError, onShowError } = props;
+  const { isOpen, onRequestClose } = props;
 
   const [titleCourse, setTitleCourse] = useState("");
   const [thumbnailCourse, setThumbnailCourse] = useState("");
   const [descriptionCourse, setDescriptionCourse] = useState("");
-  const [error, setError] = useState("");
 
   const customStyles = {
     content: {
@@ -81,16 +78,6 @@ function ModalAddCourse(props) {
       contentLabel="Example Modal"
     >
       <h2>Thêm mới khoá học</h2>
-      {showError && error && (
-        <div className={cx("error")}>
-          <strong>{error}</strong>
-          <FontAwesomeIcon
-            className={cx("icon-close")}
-            icon={faXmark}
-            onClick={() => setError("")}
-          />
-        </div>
-      )}
       <form onSubmit={handleSubmitForm} className={cx("add-course")}>
         <div className={cx("form-control")}>
           <p className={cx("title")}>Tiêu đề:</p>

@@ -18,6 +18,15 @@ export const courses = async () => {
   }
 };
 
+export const getCoursesByAdmin = async () => {
+  try {
+    const res = await axios.get("courses");
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const coursesAndPaginate = async (page) => {
   try {
     const res = await axios.get(`courses/paginate?page=${page}`);

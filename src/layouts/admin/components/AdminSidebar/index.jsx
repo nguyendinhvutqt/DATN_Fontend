@@ -6,6 +6,7 @@ import {
   faBook,
   faNewspaper,
   faRightFromBracket,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { useContext } from "react";
@@ -47,6 +48,15 @@ function Sidebar() {
       >
         <FontAwesomeIcon icon={faNewspaper} />
         <span>Danh sách bài viết</span>
+      </NavLink>
+      <NavLink
+        to="/admin/users"
+        className={cx("block", {
+          active: location.pathname.startsWith("/admin/users"),
+        })}
+      >
+        <FontAwesomeIcon icon={faUsers} />
+        <span>Danh sách người dùng</span>
       </NavLink>
       <div className={cx("block")} onClick={handleSignOut}>
         <FontAwesomeIcon icon={faRightFromBracket} />

@@ -5,13 +5,14 @@ import classNames from "classnames/bind";
 import * as blogService from "../../services/blogService";
 import styles from "./style.module.scss";
 import { toast, ToastContainer } from "react-toastify";
+import { Link } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
 const Post = () => {
   const [title, setTitle] = useState("");
+  const [postBlogSuccess, setPostBlogSuccess] = useState(false);
   const [thumbnail, setThumbnail] = useState("");
-  const [content, setContent] = useState("");
 
   const editorRef = useRef(null);
 
@@ -19,6 +20,7 @@ const Post = () => {
     try {
       const result = await blogService.addBlog(data);
       if (result.status === 201) {
+        setPostBlogSuccess(true);
         toast.success(result.data.message);
       } else if (result.status === 400) {
         toast.error(result.data.message);
@@ -70,7 +72,7 @@ const Post = () => {
       <Editor
         apiKey="4ri0qkl6qqoooknb8ba09asl4r2pmb89b0bup7h4a3t5qfev"
         onInit={(evt, editor) => (editorRef.current = editor)}
-        initialValue={content}
+        initialValue={""}
         init={{
           height: 500,
           menubar: false,
@@ -103,9 +105,16 @@ const Post = () => {
             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
         }}
       />
-      <button className={cx("btn-post")} onClick={handlePostBlog}>
-        Đăng bài viết
-      </button>
+      <div className={cx("box-btn")}>
+        <Link to="/" className={cx("btn-back")}>
+          Quay lại
+        </Link>
+        {postBlogSuccess === false && (
+          <button className={cx("btn-post")} onClick={handlePostBlog}>
+            Đăng bài viết
+          </button>
+        )}
+      </div>
       <ToastContainer />
     </div>
   );

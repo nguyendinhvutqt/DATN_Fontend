@@ -1,8 +1,8 @@
 import axios, { axiosPublic } from "../ultils/axios";
 
-export const getUsers = async () => {
+export const getUsers = async (page) => {
   try {
-    const res = await axios.get("users");
+    const res = await axios.get(`users/?page=${page}`);
     return res;
   } catch (error) {
     return error;
@@ -30,6 +30,24 @@ export const register = async (data) => {
 export const getCourseLearned = async () => {
   try {
     const res = await axios.get(`users/course/learned`);
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const blockUser = async (userId) => {
+  try {
+    const res = await axios.put(`users/block`, { userId });
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const unBlockUser = async (userId) => {
+  try {
+    const res = await axios.put(`users/un-block`, { userId });
     return res;
   } catch (error) {
     return error;

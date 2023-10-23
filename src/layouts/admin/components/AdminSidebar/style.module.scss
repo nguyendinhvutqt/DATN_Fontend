@@ -3,12 +3,13 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 200px;
+  width: 250px;
   min-height: 100vh;
   z-index: 1000;
   border-right: 1px solid #f1f1f2;
   border-left: 1px solid #f1f1f2;
 }
+
 .profile {
   width: 100%;
   display: flex;

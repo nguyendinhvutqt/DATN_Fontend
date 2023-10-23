@@ -26,6 +26,7 @@ const CourseDetails = () => {
   const [chapters, setChapters] = useState([]);
 
   const courseId = window.location.pathname.split("/")[3];
+  // eslint-disable-next-line no-unused-vars
   const [showError, setShowError] = useState(false);
   const [isShowAddChapter, setIsShowAddChapter] = useState(false);
   const [isShowDeleteChapter, setIsShowDeleteChapter] = useState(false);
@@ -49,10 +50,6 @@ const CourseDetails = () => {
     const updatedChapters = [...chapters, newChapter];
     setChapters(updatedChapters);
     setIsShowAddChapter(false);
-  };
-
-  const handleShowError = () => {
-    setShowError(true);
   };
 
   // xoá chương

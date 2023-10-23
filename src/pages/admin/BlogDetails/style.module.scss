@@ -1,39 +1,17 @@
 .wrapper {
-  padding: 16px 16px 16px 40px;
-  min-height: 100vh;
-}
+  padding: 12px 102px 12px 82px;
+  max-width: 900px;
+  overflow-x: scroll;
 
-.control-input {
-  margin: 16px 0;
-
-  p {
-    font-size: 1.6rem;
+  h1 {
+    margin: 24px 0;
   }
 }
-.input {
-  width: 100%;
-  padding: 8px 16px;
-  font-size: 1.8rem;
-  border: 1px solid #f1f1f2;
-}
-
-.file {
-  width: 100%;
-  padding: 8px 16px;
-  font-size: 1.6rem;
-}
-
-.control-thumbnail {
-  margin: 12px 0;
-
-  .thumbnail {
-    max-width: 700px;
-  }
-}
-
-.box-btn {
+.btn {
   display: flex;
   justify-content: flex-end;
+  margin: 24px 0;
+  border-top: 1px solid gray;
 
   .btn-back {
     margin-top: 12px;
@@ -49,14 +27,13 @@
     }
   }
 
-  .btn-post {
+  .btn-duyet {
     margin-top: 12px;
     padding: 12px 24px;
     background-color: #ec482d;
     border-radius: 8px;
-    font-weight: 500;
+    font-weight: 600;
     color: white;
-    margin-right: 12px;
 
     &:hover {
       cursor: pointer;
