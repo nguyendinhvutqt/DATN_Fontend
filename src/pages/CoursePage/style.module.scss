@@ -8,7 +8,7 @@
   flex-direction: column;
 }
 
-.blog {
+.course {
   padding: 12px 0;
   display: flex;
   border-bottom: 1px solid gray;
@@ -26,27 +26,30 @@
 .description {
   padding: 4px 12px 4px 24px;
 
-  .title-blog {
+  .title-course {
     color: black;
     font-weight: 600;
   }
 
-  .profile-blog {
+  .member-course {
     display: flex;
     align-items: center;
     margin: 8px 0;
 
-    .avatar-user {
-      width: 35px;
-    }
-
-    .name-user {
+    .text-member {
       margin-left: 8px;
-      font-weight: 500;
     }
   }
 
   .text {
+    height: 250px;
+    font-size: 1.4rem;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: 6;
+    max-height: 135px;
     color: black;
   }
 }

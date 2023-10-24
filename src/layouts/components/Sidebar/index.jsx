@@ -6,6 +6,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import HeadlessTippy from "@tippyjs/react/headless";
 import {
   faCirclePlus,
+  faFilm,
   faHouse,
   faNewspaper,
   faPen,
@@ -64,9 +65,19 @@ export const Sidebar = () => {
 
       <NavLink
         className={cx("home", {
+          active: location.pathname.startsWith("/courses"),
+        })}
+        to="/courses"
+      >
+        <FontAwesomeIcon className={cx("icon-blog")} icon={faFilm} />
+        <p>Khoá học</p>
+      </NavLink>
+
+      <NavLink
+        className={cx("home", {
           active: location.pathname.startsWith("/blog"),
         })}
-        to="/blog"
+        to="/blogs"
       >
         <FontAwesomeIcon className={cx("icon-blog")} icon={faNewspaper} />
         <p>Bài viết</p>

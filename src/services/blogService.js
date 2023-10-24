@@ -1,5 +1,14 @@
 import axios from "../ultils/axios";
 
+export const getBlog = async (blogId) => {
+  try {
+    const res = await axios.get(`blogs/${blogId}`);
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const getBlogs = async () => {
   try {
     const res = await axios.get("blogs");

@@ -13,6 +13,7 @@ import CourseItem from "../CourseItem";
 import { Wrapper as PopperWrapper } from "../Popper";
 import { useDebounce } from "../../hooks";
 import * as searchService from "../../services/searchService";
+import BlogItem from "../BlogItem";
 
 const cx = classNames.bind(styles);
 
@@ -83,10 +84,10 @@ const Search = () => {
               </div>
               <h3 className={cx("search-title")}>Danh sách bài viết</h3>
               <div className={cx("course-list")}>
-                {/* {blogs.length < 1 && <p>Không tìm thấy bài viết</p>}
+                {blogs.length < 1 && <p>Không tìm thấy bài viết</p>}
                 {blogs.map((result) => (
-                  <CourseItem key={result.id} data={result} />
-                ))} */}
+                  <BlogItem key={result.id} data={result} />
+                ))}
               </div>
             </PopperWrapper>
           </div>

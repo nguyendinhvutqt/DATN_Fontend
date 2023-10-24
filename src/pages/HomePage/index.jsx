@@ -2,33 +2,51 @@ import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./style.module.scss";
 import { Link } from "react-router-dom";
-import banner1 from "../../assets/images/banner1.jpg";
-import SliderComponent from "../../components/Slider";
-import * as courseService from "../../services/courseService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
 import { useSelector } from "react-redux";
-import { toast, ToastContainer } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+
+import banner1 from "../../assets/images/banner1.jpg";
+import SliderComponent from "../../components/Slider";
+import * as courseService from "../../services/courseService";
+import * as blogService from "../../services/blogService";
 
 const cx = classNames.bind(styles);
 
 export const HomePage = () => {
   const [courses, setCourses] = useState([]);
+  const [blogs, setBlogs] = useState([]);
 
   const user = useSelector((state) => state.user);
 
-  useEffect(() => {
-    const fetchApi = async () => {
-      try {
-        const result = await courseService.courses();
-        if (result.status === 200) {
-          setCourses(result.data);
-        }
-      } catch (error) {
-        console.log(error);
+  const getCoursesApi = async () => {
+    try {
+      const result = await courseService.courses();
+      if (result.status === 200) {
+        setCourses(result.data);
       }
-    };
-    fetchApi();
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const getBlogsApi = async () => {
+    try {
+      const result = await blogService.getBlogs();
+      console.log(result);
+      setBlogs(result.data.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getCoursesApi();
+  }, []);
+
+  useEffect(() => {
+    getBlogsApi();
   }, []);
   return (
     <div className={cx("wrapper")}>
@@ -64,8 +82,8 @@ export const HomePage = () => {
                     <Link
                       to={
                         course.students.includes(user?.userId)
-                          ? `learning/${course._id}?id=${course?.chapters[0]?.lessons[0]._id}`
-                          : `courses/${course._id}`
+                          ? `/learning/${course._id}?id=${course?.chapters[0]?.lessons[0]._id}`
+                          : `/courses/${course._id}`
                       }
                     >
                       <img
@@ -96,23 +114,39 @@ export const HomePage = () => {
           </Link> */}
         </div>
         <div className={cx("list-blog")}>
-          {courses.map((item) => (
-            <div key={item._id} className={cx("blog")}>
-              <Link to={`/blog`} className={cx("link-blog")} key={item.id}>
-                <img
-                  className={cx("thumbnail-blog")}
-                  src={process.env.REACT_APP_API_BASE + item.thumbnail}
-                  alt=""
-                />
-                <div>
-                  <p className={cx("title-blog")}>
-                    tao ten là tao ăn cơm đi chơi suoht ngày và ngu cong đi nhạu
-                    đi da bong si sds
-                  </p>
-                </div>
-              </Link>
-            </div>
-          ))}
+          {blogs &&
+            blogs.map((item) => (
+              <div key={item._id} className={cx("blog")}>
+                <Link
+                  to={`/blogs/${item._id}`}
+                  className={cx("link-blog")}
+                  key={item.id}
+                >
+                  <img
+                    className={cx("thumbnail-blog")}
+                    src={process.env.REACT_APP_API_BASE + item.thumbnail}
+                    alt=""
+                  />
+                  <div>
+                    <p className={cx("title-blog")}>{item.title}</p>
+                    <div className={cx("profile-blog")}>
+                      <img
+                        className={cx("avatar-blog")}
+                        src={
+                          process.env.REACT_APP_API_BASE + item.author.avatar
+                        }
+                        alt="avatar"
+                      />
+                      <p className={cx("name-blog")}>{item.author.name}</p>
+                    </div>
+                    {/* <div className={cx("views-blog")}>
+                      <FontAwesomeIcon icon={faEye} color="gray" />
+                      <span className={cx("count-views")}>{item.views}</span>
+                    </div> */}
+                  </div>
+                </Link>
+              </div>
+            ))}
         </div>
       </div>
       <ToastContainer />
