@@ -15,7 +15,6 @@ const BlogDetails = () => {
   const getBlogApi = async (blogId) => {
     try {
       const result = await blogService.getBlog(blogId);
-      console.log(result);
       if (result.status === 200) {
         setBlog(result.data.data);
       }

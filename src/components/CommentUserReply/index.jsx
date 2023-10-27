@@ -4,13 +4,13 @@ import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
 import * as commentService from "../../services/commentService";
+import { getTimeComment } from "../../ultils/func";
 
 const cx = classNames.bind(styles);
 function CommentUserReply(props) {
   const { comment, commentId, userId, onReplyComment, showReplyComment } =
     props;
 
-  console.log(comment);
   const [like, setLike] = useState(0);
 
   useEffect(() => {
@@ -68,7 +68,7 @@ function CommentUserReply(props) {
           >
             Trả lời
           </p>
-          <p className={cx("time")}>1 tháng trước</p>
+          <p className={cx("time")}>{getTimeComment(comment.createdAt)}</p>
           <div className={cx("box-like")}>
             {like > 0 && (
               <>

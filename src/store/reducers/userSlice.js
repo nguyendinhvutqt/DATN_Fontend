@@ -10,20 +10,15 @@ const userSlice = createSlice({
     name: "",
     avatar: "",
     roles: [],
-    accessToken: "",
-    refreshToken: "",
   },
 
   reducers: {
     login(state, action) {
-      console.log("action: ", action);
       state.isLoggedIn = true;
       state.userId = action.payload.user.userId;
       state.name = action.payload.user.name;
       state.avatar = action.payload.user.avatar;
       state.roles = action.payload.user.roles;
-      state.accessToken = action.payload.accessToken;
-      state.refreshToken = action.payload.refreshToken;
     },
     logout(state) {
       state.isLoggedIn = false;
@@ -31,16 +26,10 @@ const userSlice = createSlice({
       state.name = "";
       state.avatar = "";
       state.roles = [];
-      state.accessToken = "";
-      state.refreshToken = "";
-    },
-    rfToken(state, action) {
-      state.accessToken = action.payload.accessToken;
-      state.refreshToken = action.payload.refreshToken;
     },
   },
 });
 
-export const { login, logout, rfToken } = userSlice.actions;
+export const { login, logout } = userSlice.actions;
 
 export default userSlice.reducer;

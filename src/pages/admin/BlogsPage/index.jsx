@@ -5,17 +5,26 @@ import { ToastContainer } from "react-toastify";
 import styles from "./style.module.scss";
 import * as blogService from "../../../services/blogService";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPenToSquare } from "@fortawesome/free-solid-svg-icons";
+import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
+import Paginate from "../../../components/Paginate";
+import ModalDeleteBlog from "./ModalDeleteBlog";
 const cx = classNames.bind(styles);
 
 function BlogsPage() {
   const [blogs, setBlogs] = useState([]);
-  const getBlogsApi = async () => {
+  const [modalDeleteBlogIsOpen, setModalDeleteBlogIsOpen] = useState(false);
+  const [blogIdDelete, setBlogIdDelete] = useState(null);
+  // phân trang
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(0);
+
+  const getBlogsApi = async (currentPage) => {
     try {
-      const result = await blogService.getBlogs();
+      const result = await blogService.getBlogsAndPaginate(currentPage);
       if (result.status === 200) {
         setBlogs(result.data.data);
+        setTotalPage(result.data.totalPage);
       }
     } catch (error) {
       console.log(error);
@@ -23,8 +32,21 @@ function BlogsPage() {
   };
 
   useEffect(() => {
-    getBlogsApi();
-  }, []);
+    getBlogsApi(currentPage);
+  }, [currentPage]);
+
+  const handlePageClick = (e) => {
+    setCurrentPage(e.selected + 1);
+  };
+
+  const handleDeleteBlog = async () => {
+    setModalDeleteBlogIsOpen(false);
+    getBlogsApi(currentPage);
+  };
+
+  const closeModal = () => {
+    setModalDeleteBlogIsOpen(false);
+  };
   return (
     <div className={cx("wrapper")}>
       <h2>DANH SÁCH BÀI VIẾT</h2>
@@ -64,14 +86,32 @@ function BlogsPage() {
                           />
                         </Link>
                       </div>
+                      <div
+                        className={cx("btn-icon")}
+                        onClick={() => {
+                          setModalDeleteBlogIsOpen(true);
+                          setBlogIdDelete(blog._id);
+                        }}
+                      >
+                        <FontAwesomeIcon
+                          className={cx("icon")}
+                          icon={faTrash}
+                        />
+                      </div>
                     </div>
                   </td>
                 </tr>
               ))}
           </tbody>
         </table>
-        {/* <Paginate onClickPage={handlePageClick} totalPage={totalPage} /> */}
+        <Paginate onClickPage={handlePageClick} totalPage={totalPage} />
       </div>
+      <ModalDeleteBlog
+        isOpen={modalDeleteBlogIsOpen}
+        blogId={blogIdDelete}
+        onRequestClose={closeModal}
+        onBlogeDeleted={handleDeleteBlog}
+      />
       <ToastContainer />
     </div>
   );

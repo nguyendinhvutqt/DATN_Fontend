@@ -34,7 +34,6 @@ export const HomePage = () => {
   const getBlogsApi = async () => {
     try {
       const result = await blogService.getBlogs();
-      console.log(result);
       setBlogs(result.data.data);
     } catch (error) {
       console.log(error);

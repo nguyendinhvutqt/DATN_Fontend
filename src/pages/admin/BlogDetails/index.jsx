@@ -17,9 +17,9 @@ const BlogDetailAdmin = () => {
 
   const getBlogApi = async (blogId) => {
     try {
-      const result = await blogService.getBlogs(blogId);
+      const result = await blogService.getBlog(blogId);
       if (result.status === 200) {
-        setBlog(result.data.data[0]);
+        setBlog(result.data.data);
       }
     } catch (error) {
       console.log(error);
@@ -40,6 +40,7 @@ const BlogDetailAdmin = () => {
 
   useEffect(() => {
     getBlogApi(blogId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [blogId]);
   return (
     <div className={cx("wrapper")}>

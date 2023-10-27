@@ -4,24 +4,25 @@ import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faBook,
+  faHome,
   faNewspaper,
   faRightFromBracket,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useContext } from "react";
-import AuthContext from "../../../../context/AuthProvider";
 import avatar from "../../../../assets/images/avatar-default.png";
+import { useDispatch } from "react-redux";
+import { logout } from "../../../../store/reducers/userSlice";
 
 const cx = classNames.bind(styles);
 
 function Sidebar() {
-  const { setAuth } = useContext(AuthContext);
+  const dispatch = useDispatch();
 
   const navigate = useNavigate();
 
-  const handleSignOut = (e) => {
-    setAuth({});
+  const handleSignOut = () => {
+    dispatch(logout());
     navigate("/sign-in");
   };
   const location = useLocation();
@@ -31,6 +32,10 @@ function Sidebar() {
         <img className={cx("avatar")} src={avatar} alt="" />
         <h3>Nguyen Dinh Vu</h3>
       </div>
+      <NavLink to="/admin" className={cx("block")}>
+        <FontAwesomeIcon icon={faHome} />
+        <span>Trang quản trị</span>
+      </NavLink>
       <NavLink
         to="/admin/courses"
         className={cx("block", {

@@ -9,6 +9,15 @@ export const getBlog = async (blogId) => {
   }
 };
 
+export const getBlogsAndPaginate = async (page) => {
+  try {
+    const res = await axios.get(`blogs?page=${page}`);
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const getBlogs = async () => {
   try {
     const res = await axios.get("blogs");
@@ -30,6 +39,15 @@ export const addBlog = async (data) => {
 export const confirmBlog = async (blogId) => {
   try {
     const res = await axios.put(`blogs/${blogId}`);
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+
+export const deleteBlog = async (blogId) => {
+  try {
+    const res = await axios.delete(`blogs/${blogId}`);
     return res;
   } catch (error) {
     return error;

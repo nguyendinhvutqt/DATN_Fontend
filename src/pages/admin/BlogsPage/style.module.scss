@@ -69,7 +69,10 @@
 }
 
 .icon {
-  background-color: transparent;
   color: black;
   font-size: 1.6rem;
+
+  &:hover {
+    cursor: pointer;
+  }
 }

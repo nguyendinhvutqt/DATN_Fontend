@@ -1,0 +1,16 @@
+.box-btn {
+  margin-top: 12px;
+  float: right;
+
+  .btn {
+    padding: 8px 12px;
+    margin: 4px;
+    background-color: #f1f1f2;
+
+    &:hover {
+      background-color: gray;
+      color: #fff;
+      cursor: pointer;
+    }
+  }
+}

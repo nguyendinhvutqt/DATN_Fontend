@@ -19,7 +19,6 @@ const UserAdminPage = () => {
   const fetchApi = async (currentPage) => {
     try {
       const result = await userService.getUsers(currentPage);
-      console.log(result);
       if (result.status === 200) {
         setUsers(result.data.data);
         setTotalPage(result.data.totalPage);

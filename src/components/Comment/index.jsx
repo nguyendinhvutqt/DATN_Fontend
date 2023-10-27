@@ -47,7 +47,6 @@ function Comment(props) {
     socket.on("new-reply-comment", async (data) => {
       setComments((prev) => {
         return prev.map((comment) => {
-          console.log(comment._id === data._id);
           if (comment._id === data._id) {
             return data;
           }
@@ -96,8 +95,6 @@ function Comment(props) {
   }, [lessonId]);
 
   const handleReplyComment = (replyCommentId, replyCommentUser) => {
-    console.log("replyCommentId: ", replyCommentId);
-    console.log("replyCommentUser: ", replyCommentUser);
     setReplyCommentId(replyCommentId);
     setReplyCommentUser(replyCommentUser);
   };
@@ -146,14 +143,16 @@ function Comment(props) {
               <div className={cx("reply-comment")}>
                 {commentData?.replies &&
                   commentData.replies.map((reply) => (
-                    <CommentUserReply
-                      commentId={commentData._id}
-                      comment={reply}
-                      userId={user.userId}
-                      room={lessonId}
-                      onReplyComment={handleReplyComment}
-                      showReplyComment={handleShowReplyComment}
-                    />
+                    <div key={reply._id}>
+                      <CommentUserReply
+                        commentId={commentData._id}
+                        comment={reply}
+                        userId={user.userId}
+                        room={lessonId}
+                        onReplyComment={handleReplyComment}
+                        showReplyComment={handleShowReplyComment}
+                      />
+                    </div>
                   ))}
               </div>
               {replyCommentId === commentData._id && isShowCommentReply && (

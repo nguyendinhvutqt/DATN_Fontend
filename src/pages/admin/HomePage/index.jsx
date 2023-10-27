@@ -31,7 +31,6 @@ const HomePageAdmin = () => {
 
   const getUserApi = async () => {
     const result = await userService.getUsers();
-    console.log(result);
     if (result.status === 200) {
       setTotalUser(result.data.data.length);
     }

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
-import styles from "./style.module.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faThumbsUp } from "@fortawesome/free-solid-svg-icons";
+
+import styles from "./style.module.scss";
 import * as commentService from "../../services/commentService";
+import { getTimeComment } from "../../ultils/func";
 
 const cx = classNames.bind(styles);
 
@@ -21,7 +23,6 @@ function CommentUser(props) {
   const likeCommentApi = async (commentId) => {
     try {
       const result = await commentService.likeComment(commentId);
-      console.log(result);
       if (result.status === 200) {
         setLike(result.data.data.likes.length);
       }
@@ -65,7 +66,7 @@ function CommentUser(props) {
           >
             Trả lời
           </p>
-          <p className={cx("time")}>1 tháng trước</p>
+          <p className={cx("time")}>{getTimeComment(comment.createdAt)}</p>
           <div className={cx("box-like")}>
             {like > 0 && (
               <>

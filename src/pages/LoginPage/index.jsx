@@ -33,7 +33,6 @@ function LoginPage() {
     const fetchApi = async () => {
       try {
         const result = await userService.login(username, password);
-        console.log(result);
         if (result.status === 200) {
           setError("");
           dispatch(login(result.data));

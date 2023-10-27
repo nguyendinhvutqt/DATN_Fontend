@@ -99,7 +99,7 @@ const Search = () => {
             ref={inputSearchRef}
             spellCheck={false}
             type="text"
-            placeholder="Tìm kiếm khoá học...."
+            placeholder="Tìm kiếm khoá học, bài viết...."
             value={search}
             onChange={handleChangeInput}
             onFocus={handleShowResult}
