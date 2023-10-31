@@ -50,3 +50,18 @@
 .video {
   padding-bottom: 12px;
 }
+
+.box-radio {
+  display: flex;
+  align-items: center;
+
+  .radio {
+    display: flex;
+    align-items: center;
+    margin-left: 12px;
+
+    .label {
+      margin-left: 4px;
+    }
+  }
+}

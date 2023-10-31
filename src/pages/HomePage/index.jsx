@@ -76,7 +76,7 @@ export const HomePage = () => {
           {courses &&
             courses.map((course) => {
               return (
-                course?.chapters[0]?.lessons && (
+                course?.chapters[0]?.lessons.length > 0 && (
                   <div key={course._id} className={cx("course")}>
                     <Link
                       to={

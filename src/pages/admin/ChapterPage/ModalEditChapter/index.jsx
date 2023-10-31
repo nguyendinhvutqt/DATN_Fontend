@@ -16,8 +16,7 @@ ModalEditChapter.propTypes = {
 };
 
 function ModalEditChapter(props) {
-  const { isOpen, onRequestClose, chapter, onChapterEdited, onShowError } =
-    props;
+  const { isOpen, onRequestClose, chapter, onChapterEdited } = props;
 
   const [titleChapter, setTitleChapter] = useState("a");
   const [chapterId, setChapterId] = useState(null);

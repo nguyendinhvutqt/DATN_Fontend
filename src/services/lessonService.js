@@ -36,10 +36,9 @@ export const deleteLesson = async (lessonId) => {
   }
 };
 
-export const learned = async (userId, lessonId) => {
+export const learned = async (lessonId) => {
   try {
     const res = await axios.post("lessons/learned", {
-      userId,
       lessonId,
     });
     return res;

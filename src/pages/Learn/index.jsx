@@ -18,6 +18,7 @@ const Learn = () => {
   // xử lí học xong video
   const [apiCalled, setApiCalled] = useState(false);
   const [isLearned, setIsLearned] = useState(false);
+  const [isLearnedText, setIsLearnedText] = useState(false);
   const [newLesson, setNewLesson] = useState(false);
 
   // eslint-disable-next-line no-unused-vars
@@ -39,6 +40,7 @@ const Learn = () => {
     try {
       const fetchApi = async () => {
         const result = await lessonService.getById(lessonId);
+        console.log(result);
         if (result.status === 200) {
           setApiCalled(false);
           setNewLesson(false);
@@ -57,6 +59,7 @@ const Learn = () => {
         const result = await courseService.course(courseId);
         if (result.status === 200) {
           setApiCalled(false);
+          setIsLearnedText(false);
           setCourse(result.data);
         }
       } catch (error) {
@@ -66,7 +69,7 @@ const Learn = () => {
 
     fetchCourse();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isLearned, apiCalled]);
+  }, [isLearned, apiCalled, isLearnedText]);
 
   const handleProgress = (state) => {
     // Kiểm tra xem thời gian hiện tại của video đã đạt đến 3/4 hay chưa
@@ -78,8 +81,9 @@ const Learn = () => {
       // Gọi API khi đã xem đủ 3/4 video
       const fetchApi = async () => {
         try {
-          const result = await lessonService.learned(user.userId, lesson._id);
-          if (result.status === "OK") {
+          const result = await lessonService.learned(lesson._id);
+          console.log(result);
+          if (result.status === 200) {
             setIsLearned(true);
           }
         } catch (error) {
@@ -89,6 +93,43 @@ const Learn = () => {
       fetchApi();
     }
   };
+
+  const handleScroll = () => {
+    const scrollTop = window.scrollY || document.documentElement.scrollTop;
+
+    // Tính toán khoảng cách tới bottom của trang (ví dụ: 20%)
+    const scrollHeight = document.documentElement.scrollHeight;
+    const windowHeight = window.innerHeight;
+    const distanceToBottom = scrollHeight - (scrollTop + windowHeight);
+
+    // Khi người dùng cuộn đến 20% đáy trang, thực hiện fetch dữ liệu
+    if (distanceToBottom < 0.4 * windowHeight) {
+      const fetchApi = async () => {
+        try {
+          const result = await lessonService.learned(lesson._id);
+          console.log(result);
+          if (result.status === 200) {
+            setIsLearnedText(true);
+          }
+        } catch (error) {
+          console.log("error", error);
+        }
+      };
+      fetchApi();
+    }
+  };
+
+  useEffect(() => {
+    if (lesson.docs) {
+      window.addEventListener("scroll", handleScroll);
+    }
+
+    // Cleanup listener khi component bị unmount
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lesson]);
 
   const handleVideoEnd = () => {
     setApiCalled(false);
@@ -128,17 +169,25 @@ const Learn = () => {
       </div>
       <div className={cx("lessons")}>
         <div className={cx("content")}>
-          <ReactPlayer
-            ref={playerRef}
-            loading="lazy"
-            playing={true}
-            width={800}
-            height={472}
-            controls={true}
-            url={lesson.resources}
-            onProgress={handleProgress}
-            onEnded={handleVideoEnd}
-          />
+          {lesson.resources && (
+            <ReactPlayer
+              ref={playerRef}
+              loading="lazy"
+              playing={true}
+              width={800}
+              height={472}
+              controls={true}
+              url={lesson.resources}
+              onProgress={handleProgress}
+              onEnded={handleVideoEnd}
+            />
+          )}
+          {lesson.docs && (
+            <div
+              className={cx("")}
+              dangerouslySetInnerHTML={{ __html: lesson.docs }}
+            ></div>
+          )}
           <div
             className={cx("description")}
             dangerouslySetInnerHTML={{ __html: lesson.content }}

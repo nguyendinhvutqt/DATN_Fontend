@@ -4,7 +4,6 @@ import { HeaderOnly } from "../../src/layouts/HeaderOnly";
 // React components
 import { HomePage } from "../pages/HomePage";
 import { ProductsPage } from "../pages/ProductsPage";
-import { Profile } from "../pages/Profile";
 
 import routesConfig from "../configs/routes";
 import { RegisterPage } from "../pages/register";
@@ -22,6 +21,7 @@ import UserAdminPage from "../pages/admin/UserPage";
 import BlogDetailAdmin from "../pages/admin/BlogDetails";
 import BlogDetails from "../pages/BlogDetails";
 import CoursePage from "../pages/CoursePage";
+import Profile from "../pages/Profile";
 
 // public route
 const publicRoutes = [
@@ -65,7 +65,7 @@ const userRoutes = [
   },
   { path: "/courses/:courseId", component: CourseDetailsUser },
   { path: "/products", component: ProductsPage },
-  { path: "/profile", component: Profile, layout: HeaderOnly },
+  { path: "/profile", component: Profile },
 ];
 
 export { publicRoutes, adminRoutes, userRoutes };

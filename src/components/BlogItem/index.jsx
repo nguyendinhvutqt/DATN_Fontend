@@ -8,7 +8,7 @@ const cx = classNames.bind(styles);
 
 const BlogItem = ({ data }) => {
   return (
-    <Link to={`/blog/${data._id}`} className={cx("wrapper")}>
+    <Link to={`/blogs/${data._id}`} className={cx("wrapper")}>
       <img
         className={cx("img-blog")}
         src={`http://localhost:3001/${data.thumbnail}`}

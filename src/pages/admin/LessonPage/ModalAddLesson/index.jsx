@@ -20,7 +20,9 @@ function ModalAddLesson(props) {
   const { isOpen, onRequestClose, chapterId, onLessonAdded } = props;
   const [titleLesson, setTitleLesson] = useState("");
   const [video, setVideo] = useState("");
-  const [descriptionLseson, setDescriptionLseson] = useState("");
+  const [descriptionLseson, setDescriptionLsesson] = useState("");
+  const [textLseson, setTextLseson] = useState("");
+  const [valueRadio, setValueRadio] = useState("");
 
   const customStyles = {
     content: {
@@ -41,13 +43,17 @@ function ModalAddLesson(props) {
         const data = {
           title: titleLesson,
           content: descriptionLseson,
+          text: textLseson,
           resources: video,
         };
+        console.log(data);
         const result = await lessonService.addLesson(chapterId, data);
         if (result.status === 201) {
-          setDescriptionLseson("");
+          setDescriptionLsesson("");
           setVideo("");
+          setTextLseson("");
           setTitleLesson("");
+          setValueRadio("");
           toast.success(result.data.message);
           onLessonAdded(chapterId, result.data.data);
         }
@@ -56,6 +62,16 @@ function ModalAddLesson(props) {
     } catch (error) {
       console.log("error", error);
     }
+  };
+
+  const typesRadio = [
+    { title: "Video", value: "video" },
+    { title: "Text", value: "text" },
+    { title: "Exercise", value: "exercise" },
+  ];
+
+  const handleRadio = (e) => {
+    setValueRadio(e.target.value);
   };
 
   return (
@@ -83,32 +99,60 @@ function ModalAddLesson(props) {
           <ReactQuill
             theme="snow"
             value={descriptionLseson}
-            onChange={setDescriptionLseson}
+            onChange={setDescriptionLsesson}
           />
         </div>
-        <div className={cx("form-control")}>
-          <p className={cx("title")}>Tài nguyên:</p>
-          <input
-            className={cx("input")}
-            type="text"
-            placeholder="Nhập đường dẫn video..."
-            onChange={(e) => setVideo(e.target.value)}
-          />
+        <div className={cx("box-radio")}>
+          {typesRadio.map((radio) => (
+            <div className={cx("radio")}>
+              <input
+                type="radio"
+                name="radio"
+                value={radio.value}
+                onChange={handleRadio}
+              />
+              <label for="html" className={cx("label")}>
+                {radio.title}
+              </label>
+            </div>
+          ))}
         </div>
-        {video && (
-          <div className={cx("video")}>
-            <p>Video đã chọn:</p>
-            <ReactPlayer
-              loading="lazy"
-              playing={true}
-              width={650}
-              height={300}
-              controls={true}
-              url={video}
+        {valueRadio === "video" && (
+          <>
+            <div className={cx("form-control")}>
+              <p className={cx("title")}>Tài nguyên:</p>
+              <input
+                className={cx("input")}
+                type="text"
+                placeholder="Nhập đường dẫn video..."
+                onChange={(e) => setVideo(e.target.value)}
+              />
+            </div>
+            {video && (
+              <div className={cx("video")}>
+                <p>Video đã chọn:</p>
+                <ReactPlayer
+                  loading="lazy"
+                  playing={true}
+                  width={650}
+                  height={300}
+                  controls={true}
+                  url={video}
+                />
+              </div>
+            )}
+          </>
+        )}
+        {valueRadio === "text" && (
+          <div className={cx("form-control")}>
+            <p className={cx("title")}>Nội dung:</p>
+            <ReactQuill
+              theme="snow"
+              value={textLseson}
+              onChange={setTextLseson}
             />
           </div>
         )}
-
         <div className={cx("box-btn")}>
           <button className={cx("btn")} onClick={onRequestClose}>
             Đóng
