@@ -13,8 +13,8 @@ const CourseItem = ({ data }) => {
     <Link
       to={
         data.students.includes(user.userId)
-          ? `/learning/${data._id}?id=${data?.chapters[0]?.lessons[0]._id}`
-          : `/courses/${data._id}`
+          ? `/learning/${data?._id}?id=${data?.chapters[0]?.lessons[0]?._id}`
+          : `/courses/${data?._id}`
       }
       className={cx("wrapper")}
     >

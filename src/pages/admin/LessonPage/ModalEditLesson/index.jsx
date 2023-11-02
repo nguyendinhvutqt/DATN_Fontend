@@ -19,10 +19,12 @@ ModalEditLesson.propTypes = {
 
 function ModalEditLesson(props) {
   const { isOpen, onRequestClose, lessonEdit, onLessonEdited } = props;
+
   const [titleLesson, setTitleLesson] = useState("");
   const [video, setVideo] = useState("");
   const [descriptionLseson, setDescriptionLseson] = useState("");
   const [loading, setLoading] = useState(false);
+  const [text, setText] = useState("");
 
   const customStyles = {
     content: {
@@ -41,7 +43,14 @@ function ModalEditLesson(props) {
     if (isOpen) {
       setTitleLesson(lessonEdit.title);
       setDescriptionLseson(lessonEdit.content);
-      setVideo(lessonEdit.resources);
+      if (lessonEdit.resources) {
+        setVideo(lessonEdit.resources);
+        setText("");
+      }
+      if (lessonEdit.docs) {
+        setText(lessonEdit.docs);
+        setVideo("");
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lessonEdit]);
@@ -50,11 +59,21 @@ function ModalEditLesson(props) {
     try {
       setLoading(true);
       const fetchApi = async () => {
-        const data = {
-          title: titleLesson,
-          content: descriptionLseson,
-          resources: video,
-        };
+        let data;
+        if (lessonEdit.resources) {
+          data = {
+            title: titleLesson,
+            content: descriptionLseson,
+            resources: video,
+          };
+        }
+        if (lessonEdit.docs) {
+          data = {
+            title: titleLesson,
+            content: descriptionLseson,
+            docs: text,
+          };
+        }
         const result = await lessonService.editLesson(lessonEdit._id, data);
         if (result.status === 200) {
           setDescriptionLseson("");
@@ -99,17 +118,20 @@ function ModalEditLesson(props) {
             onChange={setDescriptionLseson}
           />
         </div>
-        <div className={cx("form-control")}>
-          <p className={cx("title")}>Tài nguyên:</p>
-          <input
-            className={cx("input")}
-            type="text"
-            placeholder="Nhập đường dẫn video..."
-            value={video}
-            onChange={(e) => setVideo(e.target.value)}
-          />
-        </div>
-        {video && (
+        {lessonEdit.resources && (
+          <div className={cx("form-control")}>
+            <p className={cx("title")}>Tài nguyên:</p>
+            <input
+              className={cx("input")}
+              type="text"
+              placeholder="Nhập đường dẫn video..."
+              value={video}
+              onChange={(e) => setVideo(e.target.value)}
+            />
+          </div>
+        )}
+
+        {lessonEdit.resources && video && (
           <div className={cx("video")}>
             <p>Video đã chọn:</p>
             <ReactPlayer
@@ -120,6 +142,12 @@ function ModalEditLesson(props) {
               controls={true}
               url={video}
             />
+          </div>
+        )}
+        {lessonEdit.docs && (
+          <div className={cx("form-control")}>
+            <p className={cx("title")}>Nội dung:</p>
+            <ReactQuill theme="snow" value={text} onChange={setText} />
           </div>
         )}
 

@@ -2,15 +2,21 @@ import classNames from "classnames/bind";
 import React, { useEffect, useRef, useState } from "react";
 import ReactPlayer from "react-player";
 import { NavLink, useLocation, useParams, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faCircleCheck,
+  faFilm,
+  faLessThan,
+  faNewspaper,
+} from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./style.module.scss";
 import * as lessonService from "../../services/lessonService";
 import * as courseService from "../../services/courseService";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCircleCheck, faLessThan } from "@fortawesome/free-solid-svg-icons";
 import * as func from "../../ultils/func";
 import Comment from "../../components/Comment";
-import { useSelector } from "react-redux";
+import Footer from "../../layouts/components/Footer";
 
 const cx = classNames.bind(styles);
 
@@ -40,7 +46,6 @@ const Learn = () => {
     try {
       const fetchApi = async () => {
         const result = await lessonService.getById(lessonId);
-        console.log(result);
         if (result.status === 200) {
           setApiCalled(false);
           setNewLesson(false);
@@ -215,9 +220,21 @@ const Learn = () => {
                     to={`/learning/${course._id}?id=${lesson._id}`}
                     onClick={() => setLessonId(lesson._id)}
                   >
-                    <p className={cx("title")}>{`${++numberLesion}. ${
-                      lesson.title
-                    }`}</p>
+                    <p className={cx("title")}>
+                      {` ${++numberLesion}. ${lesson.title} `}
+                    </p>
+                    {lesson?.resources && (
+                      <FontAwesomeIcon
+                        className={cx("icon-lesson")}
+                        icon={faFilm}
+                      />
+                    )}
+                    {lesson?.docs && (
+                      <FontAwesomeIcon
+                        className={cx("icon-lesson")}
+                        icon={faNewspaper}
+                      />
+                    )}
                     {lesson.userLearneds.includes(user.userId) && (
                       <p className={cx("icon-check")}>
                         <FontAwesomeIcon
@@ -233,6 +250,7 @@ const Learn = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };

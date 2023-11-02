@@ -81,8 +81,8 @@ export const HomePage = () => {
                     <Link
                       to={
                         course.students.includes(user?.userId)
-                          ? `/learning/${course._id}?id=${course?.chapters[0]?.lessons[0]._id}`
-                          : `/courses/${course._id}`
+                          ? `/learning/${course?._id}?id=${course?.chapters[0]?.lessons[0]._id}`
+                          : `/courses/${course?._id}`
                       }
                     >
                       <img

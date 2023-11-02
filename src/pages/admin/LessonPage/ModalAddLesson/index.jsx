@@ -46,7 +46,6 @@ function ModalAddLesson(props) {
           text: textLseson,
           resources: video,
         };
-        console.log(data);
         const result = await lessonService.addLesson(chapterId, data);
         if (result.status === 201) {
           setDescriptionLsesson("");
