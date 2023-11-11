@@ -1,5 +1,5 @@
 // Layouts
-import { HeaderOnly } from "../../src/layouts/HeaderOnly";
+// import { HeaderOnly } from "../../src/layouts/HeaderOnly";
 
 // React components
 import { HomePage } from "../pages/HomePage";

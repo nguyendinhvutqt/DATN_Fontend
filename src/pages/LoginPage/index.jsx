@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./style.module.scss";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -10,10 +10,12 @@ import {
   faUser,
   faXmark,
 } from "@fortawesome/free-solid-svg-icons";
+import { gapi } from "gapi-script";
 
 import * as userService from "../../services/userService";
 import logo from "../../assets/images/l.png";
 import { login } from "../../store/reducers/userSlice";
+import LoginGoogle from "../../components/LoginGoogle";
 
 const cx = classNames.bind(styles);
 
@@ -28,6 +30,18 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    function start() {
+      gapi.client.init({
+        clientId:
+          "1042533964811-q3ho970e77ee45meinb4dpo5lr1nk588.apps.googleusercontent.com",
+        scope: "",
+      });
+    }
+
+    gapi.load("client:auth2", start);
+  });
 
   const handleSubmit = (e) => {
     const fetchApi = async () => {
@@ -117,6 +131,7 @@ function LoginPage() {
               Đăng kí
             </Link>
           </div>
+          <LoginGoogle />
         </div>
       </div>
     </div>

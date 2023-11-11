@@ -7,6 +7,7 @@ const userSlice = createSlice({
   initialState: {
     isLoggedIn: false,
     userId: "",
+    googleId: "",
     name: "",
     avatar: "",
     roles: [],
@@ -16,6 +17,7 @@ const userSlice = createSlice({
     login(state, action) {
       state.isLoggedIn = true;
       state.userId = action.payload.user.userId;
+      state.googleId = action.payload.user?.googleId;
       state.name = action.payload.user.name;
       state.avatar = action.payload.user.avatar;
       state.roles = action.payload.user.roles;

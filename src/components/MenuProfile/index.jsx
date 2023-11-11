@@ -36,15 +36,24 @@ const Profile = ({ user, dispatchLogout }) => {
           <div className={cx("show-profile")} tabIndex="-1" {...attrs}>
             <PopperWrapper>
               <div className={cx("profile")}>
-                <img
-                  className={cx("img-profile")}
-                  src={
-                    user?.avatar
-                      ? `${process.env.REACT_APP_API_BASE}${user.avatar}`
-                      : avatar
-                  }
-                  alt="img-avatar"
-                />
+                {user?.googleId ? (
+                  <img
+                    className={cx("img-profile")}
+                    src={user.avatar}
+                    alt="img-avatar"
+                  />
+                ) : (
+                  <img
+                    className={cx("img-profile")}
+                    src={
+                      user?.avatar
+                        ? `${process.env.REACT_APP_API_BASE}${user.avatar}`
+                        : avatar
+                    }
+                    alt="img-avatar"
+                  />
+                )}
+
                 <p className={cx("title-name")}>{user.name}</p>
               </div>
               <Link to="/profile" className={cx("to-profile")}>
@@ -69,12 +78,21 @@ const Profile = ({ user, dispatchLogout }) => {
         )}
         onClickOutside={handleMenu}
       >
-        <img
-          onClick={() => setShowMenu(!showMenu)}
-          className={cx("img-avatar")}
-          src={`${process.env.REACT_APP_API_BASE}${user.avatar}`}
-          alt="avatar"
-        />
+        {user?.googleId ? (
+          <img
+            onClick={() => setShowMenu(!showMenu)}
+            className={cx("img-avatar")}
+            src={user.avatar}
+            alt="avatar"
+          />
+        ) : (
+          <img
+            onClick={() => setShowMenu(!showMenu)}
+            className={cx("img-avatar")}
+            src={`${process.env.REACT_APP_API_BASE}${user.avatar}`}
+            alt="avatar"
+          />
+        )}
       </HeadlessTippy>
     </div>
   );

@@ -18,6 +18,15 @@ export const login = async (username, password) => {
   }
 };
 
+export const loginGoogle = async (data) => {
+  try {
+    const res = await axiosPublic.post("users/sign-in/google", data);
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const register = async (data) => {
   try {
     const res = await axiosPublic.post("users/sign-up", data);
