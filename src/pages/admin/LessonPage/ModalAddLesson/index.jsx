@@ -23,6 +23,7 @@ function ModalAddLesson(props) {
   const [descriptionLseson, setDescriptionLsesson] = useState("");
   const [textLseson, setTextLseson] = useState("");
   const [valueRadio, setValueRadio] = useState("");
+  const [file, setFile] = useState("");
 
   const customStyles = {
     content: {
@@ -37,15 +38,16 @@ function ModalAddLesson(props) {
     },
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
     try {
       const fetchApi = async () => {
-        const data = {
-          title: titleLesson,
-          content: descriptionLseson,
-          text: textLseson,
-          resources: video,
-        };
+        const data = new FormData();
+        data.append("title", titleLesson);
+        data.append("content", descriptionLseson);
+        data.append("text", textLseson);
+        data.append("resources", video);
+        data.append("file", file);
         const result = await lessonService.addLesson(chapterId, data);
         if (result.status === 201) {
           setDescriptionLsesson("");
@@ -53,6 +55,7 @@ function ModalAddLesson(props) {
           setTextLseson("");
           setTitleLesson("");
           setValueRadio("");
+          setFile("");
           toast.success(result.data.message);
           onLessonAdded(chapterId, result.data.data);
         }
@@ -66,11 +69,15 @@ function ModalAddLesson(props) {
   const typesRadio = [
     { title: "Video", value: "video" },
     { title: "Text", value: "text" },
-    { title: "Exercise", value: "exercise" },
+    { title: "Quizz", value: "quizz" },
   ];
 
   const handleRadio = (e) => {
     setValueRadio(e.target.value);
+  };
+
+  const handleFileChange = (e) => {
+    setFile(e.target.files[0]); // Gán hình ảnh vào biến thumbnailCourse
   };
 
   return (
@@ -82,7 +89,7 @@ function ModalAddLesson(props) {
       contentLabel="Example Modal"
     >
       <h2>Thêm mới bài học</h2>
-      <div className={cx("add-course")}>
+      <form onSubmit={handleSubmit} className={cx("add-course")}>
         <div className={cx("form-control")}>
           <p className={cx("title")}>Tiêu đề:</p>
           <input
@@ -152,6 +159,18 @@ function ModalAddLesson(props) {
             />
           </div>
         )}
+        {valueRadio === "quizz" && (
+          <div className={cx("form-control")}>
+            <p className={cx("title")}>Tài nguyên:</p>
+            <input
+              className={cx("input")}
+              type="file"
+              accept=".xlsx"
+              name="file"
+              onChange={handleFileChange}
+            />
+          </div>
+        )}
         <div className={cx("box-btn")}>
           <button className={cx("btn")} onClick={onRequestClose}>
             Đóng
@@ -160,7 +179,7 @@ function ModalAddLesson(props) {
             Xác nhận
           </button>
         </div>
-      </div>
+      </form>
     </Modal>
   );
 }

@@ -125,13 +125,13 @@ function LoginPage() {
               ĐĂNG NHẬP
             </button>
           </div>
+          <LoginGoogle />
           <div className={cx("log")}>
             <p>Bạn chưa có tài khoản</p>
             <Link className={cx("link")} to="/sign-up">
               Đăng kí
             </Link>
           </div>
-          <LoginGoogle />
         </div>
       </div>
     </div>

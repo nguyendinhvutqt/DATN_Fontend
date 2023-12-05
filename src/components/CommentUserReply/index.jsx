@@ -38,11 +38,19 @@ function CommentUserReply(props) {
   };
   return (
     <div className={cx("comment")}>
-      <img
-        className={cx("avatar")}
-        src={process.env.REACT_APP_API_BASE + comment?.user?.avatar}
-        alt="avatar"
-      />
+      {comment.user.avatar.startsWith("http") ? (
+        <img
+          className={cx("avatar")}
+          src={comment?.user?.avatar}
+          alt="avatar"
+        />
+      ) : (
+        <img
+          className={cx("avatar")}
+          src={`${process.env.REACT_APP_API_BASE}${comment?.user?.avatar}`}
+          alt="avatar"
+        />
+      )}
       <div
         className={cx("content-comment", {
           active: comment.user?._id === userId,

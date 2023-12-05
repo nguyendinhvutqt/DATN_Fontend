@@ -17,6 +17,7 @@ import * as courseService from "../../services/courseService";
 import * as func from "../../ultils/func";
 import Comment from "../../components/Comment";
 import Footer from "../../layouts/components/Footer";
+import { ToastContainer, toast } from "react-toastify";
 
 const cx = classNames.bind(styles);
 
@@ -26,6 +27,7 @@ const Learn = () => {
   const [isLearned, setIsLearned] = useState(false);
   const [isLearnedText, setIsLearnedText] = useState(false);
   const [newLesson, setNewLesson] = useState(false);
+  const [answer, setAnswer] = useState("");
 
   // eslint-disable-next-line no-unused-vars
   const user = useSelector((state) => state.user);
@@ -66,6 +68,7 @@ const Learn = () => {
           setApiCalled(false);
           setIsLearnedText(false);
           setCourse(result.data);
+          setIsLearned(false);
         }
       } catch (error) {
         // Xử lý lỗi khi gọi API
@@ -112,7 +115,6 @@ const Learn = () => {
       const fetchApi = async () => {
         try {
           const result = await lessonService.learned(lesson._id);
-          console.log(result);
           if (result.status === 200) {
             setIsLearnedText(true);
           }
@@ -142,6 +144,24 @@ const Learn = () => {
 
   let numberChapter = 0;
   let numberLesion = 0;
+
+  const handleQuizz = async () => {
+    if (answer !== "") {
+      if (answer === lesson.quizz.answerCorrect) {
+        try {
+          const result = await lessonService.learned(lesson._id);
+          if (result.status === 200) {
+            setIsLearned(true);
+            toast.success("Câu trả lời chính xác");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      } else {
+        toast.error("Câu trả lời không chính xác");
+      }
+    }
+  };
 
   return (
     <div className={cx("wrapper")}>
@@ -192,6 +212,28 @@ const Learn = () => {
               className={cx("")}
               dangerouslySetInnerHTML={{ __html: lesson.docs }}
             ></div>
+          )}
+          {lesson.quizz && (
+            <div className={cx("quizz")}>
+              <h3 className={cx("title-quizz")}>{lesson.quizz.question}</h3>
+              {Object.keys(lesson.quizz.answers).map((key) => (
+                <div key={key} className={cx("answer")}>
+                  <input
+                    className={cx("radio-answer")}
+                    type="radio"
+                    name="answer"
+                    value={key}
+                    onChange={(e) => setAnswer(e.target.value)}
+                  ></input>
+                  <label className={cx("text-answer")}>
+                    {lesson.quizz.answers[key]}
+                  </label>
+                </div>
+              ))}
+              <button className={cx("btn-quizz")} onClick={handleQuizz}>
+                Xác nhận
+              </button>
+            </div>
           )}
           <div
             className={cx("description")}
@@ -249,6 +291,7 @@ const Learn = () => {
             ))}
           </div>
         </div>
+        <ToastContainer />
       </div>
       <Footer />
     </div>

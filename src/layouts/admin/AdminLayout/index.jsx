@@ -3,7 +3,6 @@ import classNames from "classnames/bind";
 import styles from "./style.module.scss";
 import Header from "../components/AdminHeader";
 import Sidebar from "../components/AdminSidebar";
-
 const cx = classNames.bind(styles);
 
 const AdminLayout = ({ children }) => {

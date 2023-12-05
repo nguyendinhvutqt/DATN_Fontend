@@ -2,8 +2,47 @@
   padding: 16px 52px;
   min-height: 100vh;
 }
+
 .inner {
   display: flex;
+  flex-direction: column;
+
+  .text-title {
+    padding-bottom: 8px;
+    border-bottom: 1px solid #f1f1f2;
+  }
+}
+
+.profile {
+  padding: 12px 0;
+  display: flex;
+  justify-content: center;
+  border-bottom: 1px solid #f1f1f2;
+
+  .name-user {
+    padding: 8px 0;
+  }
+}
+
+.wrapper-img-profile {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.list-course {
+  padding: 16px 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+
+  .course {
+    &:hover {
+      cursor: pointer;
+      transform: scale(1.1);
+    }
+  }
 }
 
 .img-course {
@@ -12,4 +51,9 @@
 
 .img-profile {
   width: 100px;
+}
+
+.my-courses {
+  padding: 16px;
+  border-bottom: 1px solid #f1f1f2;
 }

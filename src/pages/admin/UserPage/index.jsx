@@ -96,11 +96,19 @@ const UserAdminPage = () => {
                   <td>{user._id}</td>
                   <td>{user.name}</td>
                   <td className={cx("td-thumbnail")}>
-                    <img
-                      className={cx("thumbnail")}
-                      src={`${process.env.REACT_APP_API_BASE + user.avatar}`}
-                      alt="hình ảnh"
-                    />
+                    {user?.googleId ? (
+                      <img
+                        className={cx("thumbnail")}
+                        src={`${user.avatar}`}
+                        alt="hình ảnh"
+                      />
+                    ) : (
+                      <img
+                        className={cx("thumbnail")}
+                        src={`${process.env.REACT_APP_API_BASE + user.avatar}`}
+                        alt="hình ảnh"
+                      />
+                    )}
                   </td>
                   <td>{user.status}</td>
                   <td>

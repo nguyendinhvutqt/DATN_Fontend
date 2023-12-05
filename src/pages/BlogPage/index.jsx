@@ -26,6 +26,7 @@ const Blog = () => {
   return (
     <div className={cx("wrapper")}>
       <div className={cx("inner")}>
+      <h2 className={cx("text-title")}>Danh sách các khoá học</h2>
         {blogs &&
           blogs.map((blog) => {
             return (

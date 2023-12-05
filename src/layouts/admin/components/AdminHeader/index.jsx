@@ -19,7 +19,7 @@ function Header() {
   return (
     <div className={cx("wrapper")}>
       <div className={cx("inner")}>
-        <Link to="/" className={cx("logo")}>
+        <Link to="/admin" className={cx("logo")}>
           <h3>Học lập trình để đi làm</h3>
         </Link>
         <Profile user={user} dispatchLogout={handleDispatchLogout} />
