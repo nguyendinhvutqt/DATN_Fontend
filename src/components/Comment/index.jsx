@@ -160,7 +160,8 @@ function Comment(props) {
                   comment={commentData}
                   replyCommentUser={replyCommentUser}
                   room={lessonId}
-                  userId={user.userId}
+                  user={user}
+                  // userId={user.userId}
                   closeReplyComment={handleCloseReplyComment}
                 />
               )}

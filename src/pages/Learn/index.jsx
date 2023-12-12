@@ -9,6 +9,7 @@ import {
   faFilm,
   faLessThan,
   faNewspaper,
+  faPenNib,
 } from "@fortawesome/free-solid-svg-icons";
 
 import styles from "./style.module.scss";
@@ -275,6 +276,12 @@ const Learn = () => {
                       <FontAwesomeIcon
                         className={cx("icon-lesson")}
                         icon={faNewspaper}
+                      />
+                    )}
+                    {lesson?.quizz && (
+                      <FontAwesomeIcon
+                        className={cx("icon-lesson")}
+                        icon={faPenNib}
                       />
                     )}
                     {lesson.userLearneds.includes(user.userId) && (

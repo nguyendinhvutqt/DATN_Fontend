@@ -10,7 +10,7 @@ const socket = io(process.env.REACT_APP_API_BASE);
 const cx = classNames.bind(styles);
 
 function ReplyComment(props) {
-  const { comment, room, closeReplyComment, replyCommentUser } = props;
+  const { comment, room, user, closeReplyComment, replyCommentUser } = props;
 
   const [textComment, setTextComment] = useState("");
 
@@ -43,11 +43,15 @@ function ReplyComment(props) {
 
   return (
     <div className={cx("reply-comment")}>
-      <img
-        className={cx("avatar")}
-        src={process.env.REACT_APP_API_BASE + comment.user.avatar}
-        alt="avatar"
-      />
+      {user.avatar.startsWith("http") ? (
+        <img className={cx("avatar")} src={user?.avatar} alt="avatar" />
+      ) : (
+        <img
+          className={cx("avatar")}
+          src={`${process.env.REACT_APP_API_BASE}${user?.avatar}`}
+          alt="avatar"
+        />
+      )}
       <div className={cx("box-reply-comment")}>
         <input
           type="text"
