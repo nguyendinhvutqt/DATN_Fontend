@@ -63,6 +63,17 @@ export const editCourse = async (id, data) => {
   }
 };
 
+export const paymentCourse = async (courseId) => {
+  try {
+    const res = await axios.post(`courses/payment`, {
+      courseId,
+    });
+    return res;
+  } catch (error) {
+    return error;
+  }
+};
+
 export const registerCourse = async (courseId) => {
   try {
     const res = await axios.post(`courses/register-course`, {

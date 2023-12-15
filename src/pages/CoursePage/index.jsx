@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUsers } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { formatMoney } from "../../ultils/func";
 
 const cx = classNames.bind(styles);
 
@@ -59,6 +60,11 @@ const CoursePage = () => {
                         {course.students.length} thành viên
                       </p>
                     </div>
+                    <p className={cx("price-course")}>
+                      {course.price > 0
+                        ? formatMoney(course.price)
+                        : "Miễn phí"}
+                    </p>
                     <div
                       className={cx("text")}
                       dangerouslySetInnerHTML={{ __html: course.description }}

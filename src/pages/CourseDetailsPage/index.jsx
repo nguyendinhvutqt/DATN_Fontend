@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from "react";
 import classNames from "classnames/bind";
 import styles from "./style.module.scss";
-
-import * as courseService from "../../services/courseService";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { PayPalButton } from "react-paypal-button-v2";
+
+import * as courseService from "../../services/courseService";
+import { formatMoney } from "../../ultils/func";
+import * as paymentService from "../../services/paymentService";
+
 const cx = classNames.bind(styles);
 
 function CourseDetails() {
   const [courseData, setCourseData] = useState(null);
+  // eslint-disable-next-line no-unused-vars
+  const [sdkReady, setSdkReady] = useState(false);
   const navigate = useNavigate();
 
   // eslint-disable-next-line no-unused-vars
@@ -37,6 +43,42 @@ function CourseDetails() {
           `/learning/${courseData._id}?id=${courseData?.chapters[0]?.lessons[0]._id}`
         );
       }
+    }
+  };
+
+  const addPaymentScript = async () => {
+    try {
+      const result = await paymentService.getPaymentConfig();
+      if (result.status === 200) {
+        const script = document.createComment("script");
+        script.type = "text/javascript";
+        script.src = `https://www.paypal.com/sdk/js?client-id=${result.data.data}`;
+        script.async = true;
+        script.onload = () => {
+          setSdkReady(true);
+        };
+        document.appendChild(script);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    addPaymentScript();
+  }, []);
+
+  const onSuccessPaypal = async (details, data) => {
+    try {
+      const result = await courseService.paymentCourse(courseData._id);
+      console.log(result);
+      if (result.status === 200) {
+        navigate(
+          `/learning/${courseData._id}?id=${courseData?.chapters[0]?.lessons[0]._id}`
+        );
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -80,12 +122,28 @@ function CourseDetails() {
               src={process.env.REACT_APP_API_BASE + courseData.thumbnail}
               alt="thumbnail"
             />
-            <button
-              className={cx("btn-register-course")}
-              onClick={handleRegisterCourse}
-            >
-              ĐĂNG KÍ HỌC
-            </button>
+            {courseData.price > 0 ? (
+              <>
+                <button className={cx("btn-register-course")}>
+                  {formatMoney(courseData.price)}
+                </button>
+                <PayPalButton
+                  amount={Math.round((courseData.price / 24000) * 100) / 100}
+                  // shippingPreference="NO_SHIPPING" // default is "GET_FROM_FILE"
+                  onSuccess={onSuccessPaypal}
+                  onError={() => {
+                    alert("Thanh toán thất bại");
+                  }}
+                />
+              </>
+            ) : (
+              <button
+                className={cx("btn-register-course")}
+                onClick={handleRegisterCourse}
+              >
+                ĐĂNG KÍ HỌC
+              </button>
+            )}
           </div>
         </div>
       )}

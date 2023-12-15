@@ -89,3 +89,7 @@ export const getTimeComment = (time) => {
 
   return formattedTime;
 };
+
+export const formatMoney = (number) => {
+  return number.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+};

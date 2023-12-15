@@ -20,6 +20,7 @@ function ModalAddCourse(props) {
   const { isOpen, onRequestClose } = props;
 
   const [titleCourse, setTitleCourse] = useState("");
+  const [price, setPrice] = useState(0);
   const [thumbnailCourse, setThumbnailCourse] = useState("");
   const [descriptionCourse, setDescriptionCourse] = useState("");
 
@@ -42,6 +43,7 @@ function ModalAddCourse(props) {
     formData.append("file", thumbnailCourse);
     formData.append("title", titleCourse);
     formData.append("description", descriptionCourse);
+    formData.append("price", price);
     try {
       const fetchApi = async () => {
         const result = await courseService.addCourse(formData);
@@ -94,6 +96,15 @@ function ModalAddCourse(props) {
             theme="snow"
             value={descriptionCourse}
             onChange={setDescriptionCourse}
+          />
+        </div>
+        <div className={cx("form-control")}>
+          <p className={cx("title")}>Giá:</p>
+          <input
+            className={cx("input")}
+            type="number"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
           />
         </div>
         <div className={cx("form-control")}>
