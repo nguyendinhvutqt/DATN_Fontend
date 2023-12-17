@@ -8,6 +8,7 @@ import styles from "./style.module.scss";
 import * as lessonService from "../../../../services/lessonService";
 import { toast } from "react-toastify";
 import ReactPlayer from "react-player";
+import { useParams } from "react-router-dom";
 
 const cx = classNames.bind(styles);
 
@@ -24,6 +25,8 @@ function ModalAddLesson(props) {
   const [textLseson, setTextLseson] = useState("");
   const [valueRadio, setValueRadio] = useState("");
   const [file, setFile] = useState("");
+
+  const { courseId } = useParams();
 
   const customStyles = {
     content: {
@@ -43,6 +46,7 @@ function ModalAddLesson(props) {
     try {
       const fetchApi = async () => {
         const data = new FormData();
+        data.append("courseId", courseId);
         data.append("title", titleLesson);
         data.append("content", descriptionLseson);
         data.append("text", textLseson);

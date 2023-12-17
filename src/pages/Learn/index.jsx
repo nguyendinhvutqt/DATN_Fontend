@@ -28,8 +28,11 @@ const Learn = () => {
   const [isLearned, setIsLearned] = useState(false);
   const [isLearnedText, setIsLearnedText] = useState(false);
   const [newLesson, setNewLesson] = useState(false);
-  const [answer, setAnswer] = useState("");
+  const [userAnswers, setUserAnswers] = useState({});
+  const [submitAnswers, setSubmitAnswers] = useState(false);
+  const [countCorrect, setCountCorrect] = useState(0);
 
+  const inputRef = useRef();
   // eslint-disable-next-line no-unused-vars
   const user = useSelector((state) => state.user);
 
@@ -146,23 +149,68 @@ const Learn = () => {
   let numberChapter = 0;
   let numberLesion = 0;
 
-  const handleQuizz = async () => {
-    if (answer !== "") {
-      if (answer === lesson.quizz.answerCorrect) {
-        try {
-          const result = await lessonService.learned(lesson._id);
-          if (result.status === 200) {
-            setIsLearned(true);
-            toast.success("Câu trả lời chính xác");
-          }
-        } catch (error) {
-          console.log(error);
-        }
-      } else {
-        toast.error("Câu trả lời không chính xác");
+  // const handleQuizz = async () => {
+  // if (answer !== "") {
+  //   if (answer === lesson.quizz.answerCorrect) {
+  //     try {
+  //       const result = await lessonService.learned(lesson._id);
+  //       if (result.status === 200) {
+  //         setIsLearned(true);
+  //         toast.success("Câu trả lời chính xác");
+  //       }
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   } else {
+  //     toast.error("Câu trả lời không chính xác");
+  //   }
+  // }
+  // };
+
+  const handleChangeQuizz = (event) => {
+    const questionId = event.target.name;
+    const selectedAnswer = event.target.value;
+    setUserAnswers({
+      ...userAnswers,
+      [questionId]: selectedAnswer,
+    });
+  };
+
+  const checkAnswer = (questionId) => {
+    const question = lesson.quizz.find((q) => q.question === questionId);
+    const userAnswer = userAnswers[questionId];
+    return userAnswer === question.answerCorrect;
+  };
+
+  const countCorrectAnswers = () => {
+    const questions = lesson.quizz;
+    let count = 0;
+    for (let i = 0; i < questions.length; i++) {
+      const question = questions[i];
+      const userAnswer = userAnswers[question.question];
+      if (userAnswer === question.answerCorrect) {
+        count++;
       }
     }
+    return count;
   };
+
+  const handleQuizz = async () => {
+    setSubmitAnswers(true);
+    const results = [];
+    for (const question of lesson.quizz) {
+      const questionId = question.question;
+      const userAnswer = userAnswers[questionId];
+      results.push({
+        questionId,
+        answerCorrect: question.answerCorrect,
+        userAnswer,
+      });
+    }
+    console.log(results);
+  };
+
+  console.log(userAnswers);
 
   return (
     <div className={cx("wrapper")}>
@@ -214,28 +262,33 @@ const Learn = () => {
               dangerouslySetInnerHTML={{ __html: lesson.docs }}
             ></div>
           )}
-          {lesson.quizz && (
-            <div className={cx("quizz")}>
-              <h3 className={cx("title-quizz")}>{lesson.quizz.question}</h3>
-              {Object.keys(lesson.quizz.answers).map((key) => (
-                <div key={key} className={cx("answer")}>
-                  <input
-                    className={cx("radio-answer")}
-                    type="radio"
-                    name="answer"
-                    value={key}
-                    onChange={(e) => setAnswer(e.target.value)}
-                  ></input>
-                  <label className={cx("text-answer")}>
-                    {lesson.quizz.answers[key]}
-                  </label>
-                </div>
-              ))}
-              <button className={cx("btn-quizz")} onClick={handleQuizz}>
-                Xác nhận
-              </button>
-            </div>
-          )}
+          {lesson.quizz &&
+            lesson.quizz.map((q, key) => (
+              <div key={key} className={cx("quizz")}>
+                <h3 className={cx("title-quizz")}>{q.question}</h3>
+                {q.answers.map((a) => (
+                  <div key={a} className={cx("answer")}>
+                    <input
+                      className={cx("radio-answer")}
+                      type="radio"
+                      name={q.question}
+                      value={a}
+                      onChange={handleChangeQuizz}
+                    ></input>
+                    <label className={cx("text-answer")}>{a}</label>
+                  </div>
+                ))}
+                {submitAnswers &&
+                  (checkAnswer(q.question) ? (
+                    <p className={cx("correct")}>Câu trả lời đúng!</p>
+                  ) : (
+                    <p className={cx("wrong")}>Câu trả lời sai!</p>
+                  ))}
+              </div>
+            ))}
+          <button className={cx("btn-quizz")} onClick={handleQuizz}>
+            Xác nhận
+          </button>
           <div
             className={cx("description")}
             dangerouslySetInnerHTML={{ __html: lesson.content }}
