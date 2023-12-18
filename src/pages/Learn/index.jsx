@@ -18,7 +18,8 @@ import * as courseService from "../../services/courseService";
 import * as func from "../../ultils/func";
 import Comment from "../../components/Comment";
 import Footer from "../../layouts/components/Footer";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
+import ModalShowResult from "./ModalShowResult";
 
 const cx = classNames.bind(styles);
 
@@ -30,9 +31,10 @@ const Learn = () => {
   const [newLesson, setNewLesson] = useState(false);
   const [userAnswers, setUserAnswers] = useState({});
   const [submitAnswers, setSubmitAnswers] = useState(false);
-  const [countCorrect, setCountCorrect] = useState(0);
+  const [results, setResults] = useState([]);
 
-  const inputRef = useRef();
+  const [isOpenModalShowResult, setIsOpenModalShowResult] = useState(false);
+
   // eslint-disable-next-line no-unused-vars
   const user = useSelector((state) => state.user);
 
@@ -55,6 +57,7 @@ const Learn = () => {
         if (result.status === 200) {
           setApiCalled(false);
           setNewLesson(false);
+          setSubmitAnswers(false);
           setLesson(result.data.data);
         }
       };
@@ -83,6 +86,18 @@ const Learn = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLearned, apiCalled, isLearnedText]);
 
+  const fetchApi = async () => {
+    try {
+      const result = await lessonService.learned(lesson._id);
+      console.log(result);
+      if (result.status === 200) {
+        setIsLearned(true);
+      }
+    } catch (error) {
+      console.log("error", error);
+    }
+  };
+
   const handleProgress = (state) => {
     // Kiểm tra xem thời gian hiện tại của video đã đạt đến 3/4 hay chưa
     if (state.played >= 0.75 && !apiCalled && !newLesson) {
@@ -91,17 +106,7 @@ const Learn = () => {
       // played là tỉ lệ thời gian đã phát
 
       // Gọi API khi đã xem đủ 3/4 video
-      const fetchApi = async () => {
-        try {
-          const result = await lessonService.learned(lesson._id);
-          console.log(result);
-          if (result.status === 200) {
-            setIsLearned(true);
-          }
-        } catch (error) {
-          console.log("error", error);
-        }
-      };
+
       fetchApi();
     }
   };
@@ -176,16 +181,10 @@ const Learn = () => {
     });
   };
 
-  const checkAnswer = (questionId) => {
-    const question = lesson.quizz.find((q) => q.question === questionId);
-    const userAnswer = userAnswers[questionId];
-    return userAnswer === question.answerCorrect;
-  };
-
   const countCorrectAnswers = () => {
-    const questions = lesson.quizz;
+    const questions = lesson?.quizz;
     let count = 0;
-    for (let i = 0; i < questions.length; i++) {
+    for (let i = 0; i < questions?.length; i++) {
       const question = questions[i];
       const userAnswer = userAnswers[question.question];
       if (userAnswer === question.answerCorrect) {
@@ -195,22 +194,35 @@ const Learn = () => {
     return count;
   };
 
+  // const checkAnswer = (questionId) => {
+  //   const question = lesson.quizz.find((q) => q.question === questionId);
+  //   const userAnswer = userAnswers[questionId];
+  //   return userAnswer === question.answerCorrect;
+  // };
+
   const handleQuizz = async () => {
     setSubmitAnswers(true);
-    const results = [];
+
+    // Logic to check answers and update results state
+    const newResults = [];
     for (const question of lesson.quizz) {
       const questionId = question.question;
       const userAnswer = userAnswers[questionId];
-      results.push({
+      newResults.push({
         questionId,
         answerCorrect: question.answerCorrect,
         userAnswer,
+        isCorrect: userAnswer === question.answerCorrect, // Add isCorrect field to track correctness
       });
     }
-    console.log(results);
+    setIsOpenModalShowResult(true);
+    setResults(newResults);
+    fetchApi();
   };
 
-  console.log(userAnswers);
+  const handleCloseModalShowResult = () => {
+    setIsOpenModalShowResult(false);
+  };
 
   return (
     <div className={cx("wrapper")}>
@@ -278,17 +290,28 @@ const Learn = () => {
                     <label className={cx("text-answer")}>{a}</label>
                   </div>
                 ))}
+                {/* Display correct or wrong messages based on results */}
                 {submitAnswers &&
-                  (checkAnswer(q.question) ? (
-                    <p className={cx("correct")}>Câu trả lời đúng!</p>
-                  ) : (
-                    <p className={cx("wrong")}>Câu trả lời sai!</p>
+                  results.map((result, index) => (
+                    <div key={index}>
+                      {result.questionId === q.question && ( // Match question by ID
+                        <>
+                          {result.isCorrect ? (
+                            <p className={cx("correct")}>Câu trả lời đúng!</p>
+                          ) : (
+                            <p className={cx("wrong")}>Câu trả lời sai!</p>
+                          )}
+                        </>
+                      )}
+                    </div>
                   ))}
               </div>
             ))}
-          <button className={cx("btn-quizz")} onClick={handleQuizz}>
-            Xác nhận
-          </button>
+          {lesson?.quizz?.length > 0 && (
+            <button className={cx("btn-quizz")} onClick={handleQuizz}>
+              Xác nhận
+            </button>
+          )}
           <div
             className={cx("description")}
             dangerouslySetInnerHTML={{ __html: lesson.content }}
@@ -331,7 +354,7 @@ const Learn = () => {
                         icon={faNewspaper}
                       />
                     )}
-                    {lesson?.quizz && (
+                    {lesson?.quizz?.length > 0 && (
                       <FontAwesomeIcon
                         className={cx("icon-lesson")}
                         icon={faPenNib}
@@ -352,6 +375,12 @@ const Learn = () => {
           </div>
         </div>
         <ToastContainer />
+        <ModalShowResult
+          countAnswers={lesson?.quizz?.length}
+          countCorrectAnswers={countCorrectAnswers()}
+          isOpen={isOpenModalShowResult}
+          onClose={handleCloseModalShowResult}
+        />
       </div>
       <Footer />
     </div>
