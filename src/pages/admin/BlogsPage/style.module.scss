@@ -1,5 +1,5 @@
 .wrapper {
-  padding: 12px 24px 12px 74px;
+  padding: 32px 24px 12px 74px;
 }
 
 .blog-table {
@@ -75,4 +75,15 @@
   &:hover {
     cursor: pointer;
   }
+}
+
+.input-search {
+  margin-left: 8px;
+  margin-right: 24px;
+  padding: 8px 16px;
+}
+
+.box-search {
+  padding: 12px;
+  float: right;
 }

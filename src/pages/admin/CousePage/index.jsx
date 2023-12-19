@@ -17,6 +17,8 @@ import {
 import ModalEditCourse from "./ModalEditCourse";
 import Paginate from "../../../components/Paginate";
 import { Link } from "react-router-dom";
+import { useDebounce } from "../../../hooks";
+import * as searchService from "../../../services/searchService";
 
 const cx = classNames.bind(styles);
 
@@ -36,6 +38,20 @@ const CoursesPage = () => {
   // phân trang
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
+  const [inputSearch, setInputSearch] = useState("");
+
+  const debounced = useDebounce(inputSearch, 500);
+
+  useEffect(() => {
+    debounced.trim();
+    const fetchApi = async () => {
+      const result = await searchService.search(debounced);
+      if (result.status === 200) {
+        setCourses(result?.data?.data?.courses);
+      }
+    };
+    fetchApi();
+  }, [debounced]);
 
   const fetchApi = async (currentPage) => {
     try {
@@ -82,13 +98,24 @@ const CoursesPage = () => {
   return (
     <div className={cx("wrapper")}>
       <h2>DANH SÁCH KHOÁ HỌC</h2>
-      <div>
+      <div className={cx("nav")}>
         <button
           className={cx("btn", "btn-primary")}
           onClick={() => setOpenModalAdd(true)}
         >
           Thêm khoá học
         </button>
+        <div>
+          <label htmlFor="input-search">Tìm kiếm:</label>
+          <input
+            className={cx("input-search")}
+            id="input-search"
+            type="text"
+            placeholder="Nhập tên khoá học..."
+            value={inputSearch}
+            onChange={(e) => setInputSearch(e.target.value)}
+          />
+        </div>
       </div>
       <div className={cx("course-list")}>
         <table className={cx("course-table")}>

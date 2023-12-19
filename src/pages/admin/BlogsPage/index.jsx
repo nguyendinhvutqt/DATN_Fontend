@@ -9,6 +9,9 @@ import { faPenToSquare, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { Link } from "react-router-dom";
 import Paginate from "../../../components/Paginate";
 import ModalDeleteBlog from "./ModalDeleteBlog";
+import { useDebounce } from "../../../hooks";
+import * as searchService from "../../../services/searchService";
+
 const cx = classNames.bind(styles);
 
 function BlogsPage() {
@@ -18,6 +21,20 @@ function BlogsPage() {
   // phân trang
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(0);
+  const [inputSearch, setInputSearch] = useState("");
+
+  const debounced = useDebounce(inputSearch, 500);
+
+  useEffect(() => {
+    debounced.trim();
+    const fetchApi = async () => {
+      const result = await searchService.search(debounced);
+      if (result.status === 200) {
+        setBlogs(result?.data?.data?.blogs);
+      }
+    };
+    fetchApi();
+  }, [debounced]);
 
   const getBlogsApi = async (currentPage) => {
     try {
@@ -50,6 +67,17 @@ function BlogsPage() {
   return (
     <div className={cx("wrapper")}>
       <h2>DANH SÁCH BÀI VIẾT</h2>
+      <div className={cx("box-search")}>
+        <label htmlFor="input-search">Tìm kiếm:</label>
+        <input
+          className={cx("input-search")}
+          id="input-search"
+          type="text"
+          placeholder="Nhập tên bài viết..."
+          value={inputSearch}
+          onChange={(e) => setInputSearch(e.target.value)}
+        />
+      </div>
       <div>
         <table className={cx("blog-table")}>
           <thead>

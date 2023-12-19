@@ -1,5 +1,5 @@
 .wrapper {
-  padding: 12px 24px 12px 74px;
+  padding: 32px 24px 12px 74px;
 }
 
 .add-course {
@@ -82,4 +82,17 @@
   background-color: transparent;
   color: black;
   font-size: 1.6rem;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 8px;
+}
+
+.input-search {
+  margin-left: 8px;
+  margin-right: 24px;
+  padding: 8px 16px;
 }
