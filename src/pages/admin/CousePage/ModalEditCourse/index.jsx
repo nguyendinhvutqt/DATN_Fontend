@@ -31,11 +31,13 @@ function ModalEditCourse(props) {
   // const [thumbnailCourse, setThumbnailCourse] = useState("");
   const [thumbnail, setThumbnail] = useState("");
   const [error, setError] = useState("");
+  const [price, setPrice] = useState(0);
 
   useEffect(() => {
     if (isOpen) {
       setTitleCourse(courseEdit.title);
       setDescriptionCourse(courseEdit.description);
+      setPrice(courseEdit.price);
       // setThumbnailCourse(courseEdit.thumbnail);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -57,6 +59,7 @@ function ModalEditCourse(props) {
   const handleSubmitForm = (e) => {
     e.preventDefault();
     let formData = new FormData();
+    formData.append("price", price);
     formData.append("file", thumbnail);
     formData.append("title", titleCourse);
     formData.append("description", descriptionCourse);
@@ -123,6 +126,15 @@ function ModalEditCourse(props) {
               theme="snow"
               value={descriptionCourse}
               onChange={setDescriptionCourse}
+            />
+          </div>
+          <div className={cx("form-control")}>
+            <p className={cx("title")}>Giá:</p>
+            <input
+              className={cx("input")}
+              type="number"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
             />
           </div>
           <div className={cx("form-control")}>

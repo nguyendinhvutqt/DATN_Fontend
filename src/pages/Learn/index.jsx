@@ -89,7 +89,6 @@ const Learn = () => {
   const fetchApi = async () => {
     try {
       const result = await lessonService.learned(lesson._id);
-      console.log(result);
       if (result.status === 200) {
         setIsLearned(true);
       }
@@ -194,12 +193,6 @@ const Learn = () => {
     return count;
   };
 
-  // const checkAnswer = (questionId) => {
-  //   const question = lesson.quizz.find((q) => q.question === questionId);
-  //   const userAnswer = userAnswers[questionId];
-  //   return userAnswer === question.answerCorrect;
-  // };
-
   const handleQuizz = async () => {
     setSubmitAnswers(true);
 
@@ -217,7 +210,9 @@ const Learn = () => {
     }
     setIsOpenModalShowResult(true);
     setResults(newResults);
-    fetchApi();
+    if (Math.ceil((countCorrectAnswers() / lesson.quizz.length) * 100) >= 75) {
+      fetchApi();
+    }
   };
 
   const handleCloseModalShowResult = () => {

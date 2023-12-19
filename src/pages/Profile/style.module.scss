@@ -35,9 +35,11 @@
   padding: 16px 0;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 8px;
+  gap: 16px;
 
   .course {
+    background-color: #fff;
+
     &:hover {
       cursor: pointer;
       transform: scale(1.1);
@@ -46,7 +48,8 @@
 }
 
 .img-course {
-  width: 200px;
+  width: 250px;
+  height: 140.76px;
 }
 
 .img-profile {
@@ -56,4 +59,64 @@
 .my-courses {
   padding: 16px;
   border-bottom: 1px solid #f1f1f2;
+  background-color: #f1f1f2;
+}
+
+.logic-course {
+  margin-left: 8px;
+  display: flex;
+  align-items: center;
+
+  .progress-bar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #29303b;
+    position: relative;
+    margin-right: 12px;
+    border: 2px solid #fff;
+  }
+
+  .progress-bar .progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #29303b;
+    border-radius: 50%;
+  }
+
+  .progress-bar .progress .percentage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: #fff;
+    font-size: 1.6rem;
+  }
+
+  .progress-bar .border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    border-radius: 50%;
+    background-color: #ff9000;
+  }
+
+  .count-course {
+    font-size: 1.8rem;
+    font-weight: 500;
+  }
+}
+
+.icon-check {
+  margin-left: 8px;
+}
+
+.description-course {
+  padding: 12px;
 }

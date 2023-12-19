@@ -5,6 +5,13 @@ import { useSelector } from "react-redux";
 import styles from "./style.module.scss";
 import * as userService from "../../services/userService";
 import { Link } from "react-router-dom";
+import {
+  getPrtcentLessonSuccess,
+  getTotalLessons,
+  getTotalLessonsByUser,
+} from "../../ultils/func";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheckCircle } from "@fortawesome/free-solid-svg-icons";
 
 const cx = classNames.bind(styles);
 
@@ -68,6 +75,29 @@ const Profile = () => {
                     src={process.env.REACT_APP_API_BASE + course.thumbnail}
                     alt="thumbnail"
                   />
+                  <div className={cx("logic-course")}>
+                    <div className={cx("progress-bar")}>
+                      <div className={cx("progress")}>
+                        <div className={cx("percentage")}>
+                          {course &&
+                            `${getPrtcentLessonSuccess(course, user.userId)}%`}
+                        </div>
+                      </div>
+                    </div>
+                    <p className={cx("count-course")}>
+                      {`${getTotalLessonsByUser(
+                        course,
+                        user.userId
+                      )}/${getTotalLessons(course)} bài học`}
+                    </p>
+                    {getPrtcentLessonSuccess(course, user.userId) === 100 && (
+                      <FontAwesomeIcon
+                        className={cx("icon-check")}
+                        icon={faCheckCircle}
+                        color="#23CD56"
+                      />
+                    )}
+                  </div>
                   <div className={cx("description-course")}>
                     <p>{course.title}</p>
                   </div>

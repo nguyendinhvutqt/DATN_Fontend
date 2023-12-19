@@ -147,7 +147,10 @@ export const HomePage = () => {
                             className={cx("icon-user")}
                             icon={faUsers}
                           />
-                          {course?.students.length} thành viên
+                          {course?.students.length} thành viên /{" "}
+                          {course.price > 0
+                            ? formatMoney(course.price)
+                            : "Miễn phí"}
                         </p>
                         <p className={cx("title-course")}>{course.title}</p>
                       </Link>
