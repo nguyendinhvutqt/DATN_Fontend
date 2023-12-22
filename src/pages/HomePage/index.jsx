@@ -87,7 +87,7 @@ export const HomePage = () => {
           </SliderComponent>
         </div>
       </div>
-      {user.isLoggedIn === true && (
+      {user.isLoggedIn === true && coursesLearned.length > 0 && (
         <div className={cx("wrapper-content")}>
           <div className={cx("wrapper-title")}>
             <h2 className={cx("title-content")}>

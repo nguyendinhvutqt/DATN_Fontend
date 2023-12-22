@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Modal from "react-modal";
 import "react-quill/dist/quill.snow.css";
 import classNames from "classnames/bind";
@@ -32,8 +32,11 @@ function ModalShowResult(props) {
       <h2 className={cx("title")}>KẾT QUẢ TRẮC NGHIỆM</h2>
       <div>
         <p className={cx("text")}>Xin chúc mừng</p>
-        <p className={cx("text")}>
+        <p className={cx("text", "green")}>
           Bạn đã trả lời đúng {countCorrectAnswers} / {countAnswers} câu hỏi
+        </p>
+        <p className={cx("text")}>
+          Bạn phải trả lời đúng trên 85 % số câu hỏi để hoàn thành bài học
         </p>
       </div>
       <button className={cx("btn")} onClick={onClose}>
